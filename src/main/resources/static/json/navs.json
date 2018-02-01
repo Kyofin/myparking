@@ -1,0 +1,32 @@
+{
+
+	"memberCenter": [
+		{
+			"title": "用户模块",
+			"icon": "&#xe612;",
+			"href": "/user/userPage",
+			"spread": false
+		},
+		{
+			"title": "车辆模块",
+			"icon": "&#xe735;",
+			"href": "page/user/userGrade.html",
+			"spread": false
+		}
+	],
+	"parkingLotCenter": [
+		{
+			"title": "车位管理",
+			"icon": "&#xe631;",
+			"href": "page/systemSetting/basicParameter.html",
+			"spread": false
+		},{
+			"title": "订单模块",
+			"icon": "&#xe63c;",
+			"href": "page/systemSetting/logs.html",
+			"spread": false
+		}
+	]
+}
+
+

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gec.myparking.dao.ParkingPortMapper" >
+  <resultMap id="BaseResultMap" type="com.gec.myparking.domain.ParkingPort" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="carport_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="parking_user_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="position" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, carport_name, status, parking_user_id, position
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from parkingport
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from parkingport
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gec.myparking.domain.ParkingPort" >
+    insert into parkingport (id, carport_name, status, 
+      parking_user_id, position)
+    values (#{id,jdbcType=INTEGER}, #{carportName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{parkingUserId,jdbcType=INTEGER}, #{position,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gec.myparking.domain.ParkingPort" >
+    insert into parkingport
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="carportName != null" >
+        carport_name,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="parkingUserId != null" >
+        parking_user_id,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="carportName != null" >
+        #{carportName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="parkingUserId != null" >
+        #{parkingUserId,jdbcType=INTEGER},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gec.myparking.domain.ParkingPort" >
+    update parkingport
+    <set >
+      <if test="carportName != null" >
+        carport_name = #{carportName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="parkingUserId != null" >
+        parking_user_id = #{parkingUserId,jdbcType=INTEGER},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gec.myparking.domain.ParkingPort" >
+    update parkingport
+    set carport_name = #{carportName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      parking_user_id = #{parkingUserId,jdbcType=INTEGER},
+      position = #{position,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
