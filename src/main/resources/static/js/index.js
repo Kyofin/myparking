@@ -90,6 +90,15 @@ layui.use(['bodyTab','form','element','layer','jquery'],function(){
         },1000);
     })
 
+	//注销
+	$(".signOut").click(function () {
+		$.post("/user/logout",function (data) {
+			console.log(JSON.parse(data));
+        });
+
+		window.location="/loginPage"
+    })
+
 	//刷新后还原打开的窗口
     if(cacheStr == "true") {
         if (window.sessionStorage.getItem("menu") != null) {

@@ -98,18 +98,25 @@ layui.use(['form','layer','table','laytpl'],function(){
     $(".delAll_btn").click(function(){
         var checkStatus = table.checkStatus('userListTable'),
             data = checkStatus.data,
-            newsId = [];
+            usersId = [];
         if(data.length > 0) {
             for (let i in data) {
-                newsId.push(data[i].newsId);
+                usersId.push(data[i].id);
             }
             layer.confirm('确定删除选中的用户？', {icon: 3, title: '提示信息'}, function (index) {
-                // $.get("删除文章接口",{
-                //     newsId : newsId  //将需要删除的newsId作为参数传入
-                // },function(data){
-                tableIns.reload();
-                layer.close(index);
-                // })
+                console.log(usersId);
+                for (i=0;i<usersId.length; i++) {
+                    $.ajax({
+                        url: '/user/users',
+                        data: { id : usersId[i] ,_method:'delete'},
+                        type: 'post',
+                        success: function(result) {
+                            tableIns.reload();
+                            layer.close(index);
+                        }
+                    });
+                }
+
             })
         }else{
             layer.msg("请选择需要删除的用户");
@@ -145,12 +152,22 @@ layui.use(['form','layer','table','laytpl'],function(){
             });
         }else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除此用户？',{icon:3, title:'提示信息'},function(index){
-                // $.get("删除文章接口",{
-                //     newsId : data.newsId  //将需要删除的newsId作为参数传入
-                // },function(data){
+               /* $.get("/user/users",{
+                    newsId : data.newsId  //将需要删除的newsId作为参数传入
+                 },function(data){
                     tableIns.reload();
                     layer.close(index);
-                // })
+                })*/
+               console.log(data.id);
+                $.ajax({
+                    url: '/user/users',
+                    data: { id : data.id ,_method:'delete'},
+                    type: 'post',
+                    success: function(result) {
+                        tableIns.reload();
+                        layer.close(index);
+                    }
+                });
             });
         }
     });

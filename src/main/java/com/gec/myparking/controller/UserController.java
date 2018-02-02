@@ -25,13 +25,15 @@ public class UserController {
     @Autowired
     UserService userService;
 
-
+    //访问用户页面
     @RequestMapping(value = "/userPage",method = RequestMethod.GET)
     public String userPage()
     {
         return "user/userList";
     }
- @RequestMapping(value = "/addUserPage",method = RequestMethod.GET)
+
+    //访问添加用户页面
+    @RequestMapping(value = "/addUserPage",method = RequestMethod.GET)
     public String addUserPage()
     {
         return "user/userAdd";
@@ -76,8 +78,9 @@ public class UserController {
                Cookie cookie = new Cookie("ticket", ticket.getTicket());
                if (remember>0)
                {
-                   cookie.setMaxAge(3600*24*1000*10); //保存在客户端10天
+                   cookie.setMaxAge(3600*24*10); //保存在客户端10天
                }
+               cookie.setMaxAge(3600*24*1); //默认保留一天（单位为s）
                cookie.setPath("/");  //全网有效
                response.addCookie(cookie);
 

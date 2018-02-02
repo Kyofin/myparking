@@ -3,13 +3,13 @@ package com.gec.myparking.service;
 import com.gec.myparking.dao.CarMapper;
 import com.gec.myparking.dao.UserMapper;
 import com.gec.myparking.domain.Car;
-import com.gec.myparking.domain.User;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

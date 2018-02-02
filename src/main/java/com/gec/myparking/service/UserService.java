@@ -135,6 +135,17 @@ public class UserService {
     }
 
     /**
+     * 获得指定id用户
+     * @param id
+     * @return
+     */
+    public User getUserById(Integer id)
+    {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+
+    /**
      * 获取指定页的用户列表
      * @param page
      * @param limit
@@ -157,7 +168,7 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        if (id !=null)
+        if (id !=null && userMapper.selectByPrimaryKey(id)!=null)
             userMapper.deleteByPrimaryKey(id);
         else
             throw  new NullPointerException();

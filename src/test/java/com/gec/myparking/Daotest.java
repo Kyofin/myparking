@@ -41,8 +41,23 @@ public class Daotest {
 	ParkingPortMapper parkingPortMapper;
 
 	@Test
+	public  void insetUser()
+	{
+		for (int i = 0; i < 50; i++) {
+			User user = new User();
+			user.setUserName("user" + (i + 1));
+			user.setCreateTime(new Date());
+			user.setEmail("1040080742@qq.com");
+			user.setHeadUrl(String.format("http://images.nowcoder.com/head/%dt.png", new Random().nextInt(1000)));
+			user.setSalt(new Random().nextInt(10) + "");
+			user.setPassword(MyparkingUtil.MD5("123456" + user.getSalt()));
+			userMapper.insert(user);
+		}
+	}
+
+	@Test
 	public void initDatabase() {
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 30; i++) {
 			User user = new User();
 			user.setId(i+1);
 			user.setUserName("user"+(i+1));
@@ -69,17 +84,16 @@ public class Daotest {
 				port.setStatus(MyparkingUtil.PORT_STATUS_EMPTY);
 				parkingPortMapper.insert(port);
 
+				ParkingOrder order = new ParkingOrder();
+				order.setBeginTime(new Date());
+				order.setCarPortId(i+1);
+				order.setUserId(i+1);
+
+				orderMapper.insert(order);
 			}
 
 
-			ParkingOrder order = new ParkingOrder();
-			order.setBeginTime(new Date());
-			order.setCarPortId(1);
-			order.setUserId(1);
-			order.setDuration(111111111L);
-			order.setEndTime(new Date());
-			order.setPrice(1111.222);
-			orderMapper.insert(order);
+
 
 
 
