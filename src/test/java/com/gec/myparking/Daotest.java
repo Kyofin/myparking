@@ -19,6 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Random;
 
@@ -81,7 +86,7 @@ public class Daotest {
 				ParkingPort port = new ParkingPort();
 				port.setCarportName("A"+i);
 				port.setParkingUserId(i+1);
-				port.setStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+				port.setStatus(MyparkingUtil.PORT_STATUS_USED);
 				parkingPortMapper.insert(port);
 
 				ParkingOrder order = new ParkingOrder();
@@ -101,6 +106,42 @@ public class Daotest {
 
 
 	}
+
+	@Test
+	public void testCarInsert()
+	{
+		for (int i = 0; i < 10; i++) {
+			Car car = new Car();
+			car.setCarNumber(String.format("粤A%d%d%d",new Random().nextInt(10),new Random().nextInt(10),new Random().nextInt(10)));
+			car.setCarUserId(i+1);
+			carMapper.insert(car);
+		}
+
+		//System.out.printf(carMapper.selectByPrimaryKey(33).getCarNumber());;
+	}
+
+	@Test
+	public  void  testOrder()
+	{
+		ParkingOrder order = new ParkingOrder();
+		LocalDateTime beginTime = LocalDateTime.of(2017,2,4,10,11,0);
+		ZoneId zoneId = ZoneId.systemDefault();
+		Date beginDate = Date.from(beginTime.atZone(zoneId).toInstant());
+		LocalDateTime endTime = LocalDateTime.of(2017,2,4,21,11,0);
+		Date endDate = Date.from(beginTime.atZone(zoneId).toInstant());
+		System.err.println(beginDate);
+		System.err.println(endDate);
+		System.err.println(Period.between(beginTime.toLocalDate(),endTime.toLocalDate()).getDays());
+        System.err.println(ChronoUnit.HOURS.between(beginTime,endTime));
+		order.setBeginTime(beginDate);
+		order.setCarPortId(10);
+		order.setUserId(10);
+		order.setEndTime(new Date());
+
+		//orderMapper.insert(order);
+	}
+
+
 
 	@Test
 	public void testUpdate()

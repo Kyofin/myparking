@@ -58,7 +58,7 @@ public class ParkingPortController {
                         dataMap.put("parkingUser",userService.getUserById(userId).getUserName());
                 }
                 else
-                    dataMap.put("parkingUser","无");
+                    dataMap.put("parkingUser","无");  //没人使用的情况返回前端无
                 dataMap.put("status",port.getStatus());
                 dataList.add(dataMap);
             }

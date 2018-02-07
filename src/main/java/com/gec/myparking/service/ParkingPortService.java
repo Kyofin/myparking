@@ -86,6 +86,12 @@ public class ParkingPortService {
         return  map;
     }
 
+    public ParkingPort getPortById(Integer id)
+    {
+        return parkingPortMapper.selectByPrimaryKey(id);
+    }
+
+
     public Map usePort(Integer portId) {
         Map<String,Object> map = new HashMap();
         if (portId ==null)

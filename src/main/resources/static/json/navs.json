@@ -23,7 +23,7 @@
 		},{
 			"title": "订单模块",
 			"icon": "&#xe63c;",
-			"href": "page/systemSetting/logs.html",
+			"href": "order/orderPage",
 			"spread": false
 		}
 	]

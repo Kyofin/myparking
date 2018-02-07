@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +48,32 @@ public class MyparkingUtil {
         return  jsonObject.toString();
     }
 
+
+    /**
+     * 获取两个时间的间隔
+     * @param endDate
+     * @param nowDate
+     * @return
+     */
+    public static String getDatePoor(Date endDate, Date nowDate) {
+
+        long nd = 1000 * 24 * 60 * 60;
+        long nh = 1000 * 60 * 60;
+        long nm = 1000 * 60;
+        // long ns = 1000;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        // 计算差多少小时
+        long hour = diff % nd / nh;
+        // 计算差多少分钟
+        long min = diff % nd % nh / nm;
+        // 计算差多少秒//输出结果
+        // long sec = diff % nd % nh % nm / ns;
+        return day + "天" + hour + "小时" + min + "分钟";
+    }
+
     public static String MD5(String key) {
         char hexDigits[] = {
                 '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
@@ -73,5 +100,7 @@ public class MyparkingUtil {
             LOGGER.error("生成MD5失败", e);
             return null;
         }
+
+
     }
 }
