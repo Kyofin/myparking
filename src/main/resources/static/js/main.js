@@ -95,9 +95,19 @@ layui.use(['form','element','layer','jquery'],function(){
         $(".userAll span").text(JSON.parse(data).count);
     })
 
-    //外部图标
+    //订单数量
     $.get("/order/orders",function(data){
-        $(".outIcons span").text(JSON.parse(data).count);
+        $(".orderAll span").text(JSON.parse(data).count);
+    })
+
+    //车位数量
+    $.get("/parkingport/parkingports",function(data){
+        $(".portAll span").text(JSON.parse(data).count);
+    })
+
+    //车辆数量
+    $.get("/car/cars",function(data){
+        $(".carAll span").text(JSON.parse(data).count);
     })
 
 })
