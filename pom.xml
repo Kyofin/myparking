@@ -40,6 +40,13 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
+		<!--七牛云存储sdk-->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>7.2.9</version>
+		</dependency>
+
 
 		<!--发送邮件-->
 		<dependency>

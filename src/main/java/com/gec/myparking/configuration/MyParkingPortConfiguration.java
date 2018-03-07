@@ -23,6 +23,7 @@ public class MyParkingPortConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(passportInterceptor);
         //根据是否登录拦截页面
         registry.addInterceptor(loginRequiredInterceptor)
+                .addPathPatterns("/")
                 .addPathPatterns("/order/**")
                 .addPathPatterns("/user/**")
                 .excludePathPatterns("/user/dologin")

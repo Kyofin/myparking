@@ -79,11 +79,8 @@ public class UserService {
 
     /**
      * 注册服务
-     * @param username
-     * @param password
-     * @return
      */
-    public Map<String,Object> register(String username, String password) {
+    public Map<String,Object> register(String username, String password ,String email ,String headUrl) {
         Map<String,Object> map = new HashMap<>();
         if (StringUtils.isEmpty(username))
         {
@@ -108,10 +105,9 @@ public class UserService {
         user.setUserName(username);
         user.setSalt(UUID.randomUUID().toString().replace("-","").substring(0,5));
         user.setPassword(MyparkingUtil.MD5(password+user.getSalt()));
-        String headUrl = String.format("http://images.nowcoder.com/head/%dt.png",new Random().nextInt(1000));
         user.setHeadUrl(headUrl);
         user.setCreateTime(new Date());
-        user.setEmail("1040080742@qq.com");
+        user.setEmail(email);
         userMapper.insert(user);
 
         //登录校验通过，下发ticket
@@ -174,11 +170,17 @@ public class UserService {
             throw  new NullPointerException();
     }
 
-    public Map addUser(String userName, String password, String email) {
+    public Map addUser(String userName, String password, String email ,String headUrl) {
         Map<String ,Object> map = new HashMap<>();
         if (StringUtils.isEmpty(userName))
         {
             map.put("error","用户名不能为空");
+            return map;
+        }
+
+        if (StringUtils.isEmpty(headUrl))
+        {
+            map.put("error","用户头像不能为空");
             return map;
         }
         if (StringUtils.isEmpty(password))
@@ -204,7 +206,6 @@ public class UserService {
         user.setSalt(UUID.randomUUID().toString().replace("-","").substring(0,5));
         user.setPassword(MyparkingUtil.MD5(password+user.getSalt()));
         user.setCreateTime(new Date());
-        String headUrl = String.format("http://images.nowcoder.com/head/%dt.png",new Random().nextInt(1000));
         user.setHeadUrl(headUrl);
         user.setEmail(email);
         userMapper.insert(user);

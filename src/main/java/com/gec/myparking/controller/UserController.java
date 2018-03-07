@@ -39,15 +39,19 @@ public class UserController {
         return "user/userAdd";
     }
 
+
+
     @RequestMapping(value = "/addUser" ,method = RequestMethod.POST)
     @ResponseBody
     public  String addUser(@RequestParam String userName,
                            @RequestParam String email,
-                           @RequestParam String password
+                           @RequestParam String password,
+                           @RequestParam String headUrl
                            )
+    //todo 方法添加headURL
     {
         try {
-            Map map = userService.addUser(userName,password,email);
+            Map map = userService.addUser(userName,password,email,headUrl);
             if (map.isEmpty())
                 return MyparkingUtil.getJsonString(0,"添加用户成功");
             else
@@ -97,34 +101,34 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "/register",method = RequestMethod.POST)
-    @ResponseBody
-    public  String reg(@RequestParam("username") String username,
-                       @RequestParam("password") String password,
-                       HttpServletResponse response)
-    {
-      try {
-          Map<String,Object> map = new HashMap<>();
-
-          map = userService.register(username,password);
-
-          if (map.containsKey("ticket"))
-          {
-              //将ticket保存到客户端以此做票据
-              LoginTicket ticket = (LoginTicket) map.get("ticket");
-              Cookie cookie = new Cookie("ticket", ticket.getTicket());
-              cookie.setPath("/");  //全网有效
-              response.addCookie(cookie);
-
-              return MyparkingUtil.getJsonString(0,map,"注册成功");
-          }
-          return  MyparkingUtil.getJsonString(1,map,"注册失败"); //注册失败，返回错误信息
-      }catch (Exception e )
-      {
-          LOGGER.error(e.getMessage());
-          return MyparkingUtil.getJsonString(1,"发生异常，注册失败");
-      }
-    }
+//    @RequestMapping(value = "/register",method = RequestMethod.POST)
+//    @ResponseBody
+//    public  String reg(@RequestParam("username") String username,
+//                       @RequestParam("password") String password,
+//                       HttpServletResponse response)
+//    {
+//      try {
+//          Map<String,Object> map = new HashMap<>();
+//
+//          map = userService.register(username,password);
+//
+//          if (map.containsKey("ticket"))
+//          {
+//              //将ticket保存到客户端以此做票据
+//              LoginTicket ticket = (LoginTicket) map.get("ticket");
+//              Cookie cookie = new Cookie("ticket", ticket.getTicket());
+//              cookie.setPath("/");  //全网有效
+//              response.addCookie(cookie);
+//
+//              return MyparkingUtil.getJsonString(0,map,"注册成功");
+//          }
+//          return  MyparkingUtil.getJsonString(1,map,"注册失败"); //注册失败，返回错误信息
+//      }catch (Exception e )
+//      {
+//          LOGGER.error(e.getMessage());
+//          return MyparkingUtil.getJsonString(1,"发生异常，注册失败");
+//      }
+//    }
 
     @RequestMapping("/logout")
     @ResponseBody

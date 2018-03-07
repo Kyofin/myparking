@@ -11,7 +11,7 @@ layui.use(['form','layer'],function(){
             userName : $(".userName").val(),  //登录名
             email : $(".email").val(),  //邮箱
             password : $(".password").val(),    //密码
-            headUrl : $(".headUrl").val(),    //头像url
+            headUrl : $("#headUrl").val(),    //头像url
             },function(res){
 
         });
@@ -37,4 +37,44 @@ layui.use(['form','layer'],function(){
     var time = new Date();
     var submitTime = time.getFullYear()+'-'+filterTime(time.getMonth()+1)+'-'+filterTime(time.getDate())+' '+filterTime(time.getHours())+':'+filterTime(time.getMinutes())+':'+filterTime(time.getSeconds());
 
+
+
+
 })
+//todo 文件上传前端工作
+//上传文件的模块
+layui.use('upload', function() {
+    var $ = layui.jquery
+        , upload = layui.upload;
+    var layer = layui.layer;
+
+    //普通图片上传
+    var uploadInst = upload.render({
+        elem: '#imageFile'
+        , url: '/portal/user/uploadImage'
+        , before: function (obj) {
+            //预读本地文件示例，不支持ie8
+            obj.preview(function (index, file, result) {
+                $('#previewImg').attr('src', result); //图片链接（base64）
+            });
+        }
+        , done: function (res) {
+
+            //如果上传失败
+            if (res.code > 0) {
+                return layer.msg('上传失败');
+            }
+            //上传成功
+            if (res.code == 0) {
+                 layer.msg('上传成功');
+            }
+
+            //添加hearURL到表单中
+            var headUrl =res.msg;
+            var demoText = $('#headUrl');
+            demoText.val(headUrl)
+
+        }
+
+    })
+});
