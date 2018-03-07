@@ -10,7 +10,7 @@ import java.util.List;
 public interface ParkingOrderMapper {
 
     String TABLE_NAME = "parkingorder";
-    String SELECT_FIELDS =" id , begin_time , end_time,user_id, car_port_id,price,duration";
+    String SELECT_FIELDS =" id , begin_time , end_time,user_id, car_port_id,price,duration,status";
 
     int deleteByPrimaryKey(Integer id);
 

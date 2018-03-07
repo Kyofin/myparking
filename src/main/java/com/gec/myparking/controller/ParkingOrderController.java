@@ -56,7 +56,7 @@ public class ParkingOrderController {
                 Map dataMap = new HashMap();
                 dataMap.put("id",order.getId());
                 //获取车位的名字
-                dataMap.put("carPortName",parkingPortService.getPortById(order.getCarPortId()).getCarportName());
+            dataMap.put("carPortName",parkingPortService.getPortById(order.getCarPortId()).getCarportName());
                 dataMap.put("orderUser",userService.getUserById(order.getUserId()).getUserName());
                 dataMap.put("beginTime",order.getBeginTime());
                 dataMap.put("endTime",order.getEndTime());

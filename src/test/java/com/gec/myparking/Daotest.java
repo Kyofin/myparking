@@ -10,6 +10,7 @@ import com.gec.myparking.domain.Car;
 import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.domain.User;
+import com.gec.myparking.util.Const;
 import com.gec.myparking.util.MyparkingUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,6 +26,7 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @RunWith(SpringRunner.class)
@@ -169,4 +171,29 @@ public class Daotest {
 		parkingPortMapper.insert(new ParkingPort(null,"A16",MyparkingUtil.PORT_STATUS_BOOKING,3,"A16"));
 	}
 
+	@Test
+	public void testSelectOrder() {
+		List<ParkingOrder> orders = orderMapper.selectAllOrders();
+		for (int i = 0; i < orders.size(); i++) {
+			System.out.println(orders.get(i));
+		}
+	}
+
+
+	@Test
+	public void testInsertOrder() {
+		ParkingOrder order = new ParkingOrder();
+		order.setUserId(1);
+		order.setCarPortId(22);
+		order.setBeginTime(new Date());
+
+		orderMapper.insert(order);
+	}
+
+	@Test
+	public void testUpdateOrder() {
+		ParkingOrder order = orderMapper.selectByPrimaryKey(22);
+		order.setStatus(Const.orderStatus.ORDER_STATUS_PAYED);
+		orderMapper.updateByPrimaryKeySelective(order);
+	}
 }

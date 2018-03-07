@@ -26,6 +26,11 @@ public class TestSVGMap {
 		getSVGPath(resultCoordList);
 	}
 
+	/**
+	 * 初始化svg地图的信息
+	 * 用0和1组成的二维数组表示
+	 * @return
+	 */
 	public static int[][]  initSVGMapInfo()
 	{
 		//初始化map数组

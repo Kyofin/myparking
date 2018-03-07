@@ -22,6 +22,9 @@ public class MyparkingUtil {
     public static final Integer LOGINTICKET_STATUS_NOTUSE=1;
 
 
+
+
+
     public static String getJsonString(int code )
     {
         JSONObject jsonObject= new JSONObject();

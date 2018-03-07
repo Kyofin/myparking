@@ -25,7 +25,10 @@ public class HomeController {
         return "home/main";
     }
 
-
+    @RequestMapping(value = "myexecption")
+    public String a() throws Exception {
+        throw new Exception("发生错误");
+    }
 
 
 }

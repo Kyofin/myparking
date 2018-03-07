@@ -17,7 +17,10 @@ public class ParkingOrder {
 
     private Long duration;
 
-    public ParkingOrder(Integer id, Date beginTime, Date endTime, Integer userId, Integer carPortId, Double price, Long duration) {
+    private Integer status;
+
+
+    public ParkingOrder(Integer id, Date beginTime, Date endTime, Integer userId, Integer carPortId, Double price, Long duration, Integer status) {
         this.id = id;
         this.beginTime = beginTime;
         this.endTime = endTime;
@@ -25,6 +28,7 @@ public class ParkingOrder {
         this.carPortId = carPortId;
         this.price = price;
         this.duration = duration;
+        this.status = status;
     }
 
     public ParkingOrder() {
@@ -85,5 +89,28 @@ public class ParkingOrder {
 
     public void setDuration(Long duration) {
         this.duration = duration;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getStatus() {
+
+        return status;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingOrder{" +
+                "id=" + id +
+                ", beginTime=" + beginTime +
+                ", endTime=" + endTime +
+                ", userId=" + userId +
+                ", carPortId=" + carPortId +
+                ", price=" + price +
+                ", duration=" + duration +
+                ", status=" + status +
+                '}';
     }
 }
