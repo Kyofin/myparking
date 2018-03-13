@@ -26,4 +26,13 @@ public interface ParkingPortMapper {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME})
     List<ParkingPort> selectAllPorts();
+
+    @Select({"SELECT ",SELECT_FIELDS,"FROM ",TABLE_NAME," WHERE status = #{status}"})
+    List<ParkingPort> selectAllPortsByStatus(int status);
+
+    @Select({"SELECT carport_name","FROM ",TABLE_NAME," WHERE status = #{status}"})
+    String[] selectAllPortNameByStatus(int status);
+
+    @Select({"SELECT POSITION ","FROM ",TABLE_NAME," WHERE carport_name = #{carPortName}"})
+    String selectPortPosition(String carPortName);
 }

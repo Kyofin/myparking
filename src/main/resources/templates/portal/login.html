@@ -8,6 +8,10 @@
   <meta name="format-detection" content="telephone=no">
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+
+
   <link rel="alternate icon" type="image/png" href="/assets/i/favicon.png">
   <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
   <style>
@@ -25,21 +29,10 @@
   </style>
 </head>
 <body>
-<!--<div class="header" style="background: #0E90D2">
-  <div class="am-g">
-    <h1>欢迎使用智能停车库系统</h1>
-    <h4><strong>为广大用户带来便捷</strong></h4>
-  </div>
-  <hr />
-</div>-->
 
-<header class="am-topbar am-topbar-inverse admin-header">
-  <div class="am-topbar-brand">
-    <strong>欢迎使用智能停车库系统</strong>
-  </div>
 
-</header>
 
+<#include "/portal/header.html">
 
 <div class="am-g">
   <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered">
@@ -58,13 +51,55 @@
       </label>
       <br />
       <div class="am-cf">
-        <input type="submit" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
-        <input type="submit" name="" value="注册用户" class="am-btn am-btn-success am-btn-sm am-fr">
+        <input id="loginButton" type="button" name="" value="登 录" class="am-btn am-btn-primary am-btn-sm am-fl">
+        <input id="registerButton" type="button" name="" value="注册用户" class="am-btn am-btn-success am-btn-sm am-fr">
       </div>
     </form>
 
+
+
   </div>
 </div>
+
+
+
+
+<script>
+    //登录按钮
+    $("#loginButton").click(function(){
+        console.log($("#username").val());
+        $.post("/user/dologin", { username: $("#username").val(), password: $("#password").val()},
+            function(data){
+                var  json =JSON.parse(data); //解析str成json
+                if (json.code==0)
+                {
+                    console.log("登录中。。。");
+                    $("#loginButton").val("登录中...");
+                    setTimeout(function(){
+                        window.location.href = "/portal/user/indexPage";
+                    },2000);
+                }else{
+                    alert(json.msg)
+                }
+                /*setTimeout(function(){
+                    window.location.href = "/";
+                },1000);*/
+            });
+
+        return false;
+    })
+
+    //注册按钮
+    $("#registerButton").click(function () {
+        window.location.href="/portal/user/registerPage"
+    })
+
+
+
+</script>
+
+
+<#include "/portal/footer.html">
 
 
 </body>

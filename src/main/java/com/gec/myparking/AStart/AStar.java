@@ -13,6 +13,7 @@ import java.util.Queue;
 public class AStar
 {
 	public final static int BAR = 1; // 障碍值
+	public final static int EMPTY = 0; // 道路可通行
 	public final static int PATH = 4; // 路径
 	public final static int DIRECT_VALUE = 10; // 横竖移动代价
 	public final static int OBLIQUE_VALUE = 14; // 斜移动代价
