@@ -61,6 +61,8 @@ public class AStar
 	private void drawPath(int[][] maps, Node end)
 	{
 		List<Coord> resultCoordList = getResultCoordList();
+		//清空resultCoordList中的元素
+		resultCoordList.clear();
 		if(end==null||maps==null) return;
 		//System.out.println("总代价：" + end.G);
 		while (end != null)

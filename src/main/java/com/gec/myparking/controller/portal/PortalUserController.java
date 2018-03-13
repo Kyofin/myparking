@@ -100,7 +100,7 @@ public class PortalUserController {
 
 	/**
 	 * 根据输入点获取路径
-	 * // todo 重大bug需要修复  path会叠加
+	 *
 	 * @param beginPortName
 	 * @param endPortName
 	 * @param model
