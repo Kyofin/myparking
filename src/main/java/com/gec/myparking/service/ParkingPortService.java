@@ -189,6 +189,13 @@ public class ParkingPortService {
 			map.put("error", "车位已经被预定");
 			return map;
 		}
+
+		Integer countByUserId = parkingPortMapper.countByParkingUserId(hostHolder.getUser().getId());
+		if (countByUserId >0) {
+			map.put("error", "你已经过预约车位，请不要重复预约车位");
+			return map;
+		}
+
 		//车位状态为空时更新车位状态被预定
 		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_EMPTY) {
 			outPort.setStatus(MyparkingUtil.PORT_STATUS_BOOKING);

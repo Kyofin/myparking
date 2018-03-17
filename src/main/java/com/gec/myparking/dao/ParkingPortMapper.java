@@ -38,4 +38,7 @@ public interface ParkingPortMapper {
 
     @Select({"SELECT  ",SELECT_FIELDS,"FROM ",TABLE_NAME," WHERE carport_name = #{carPortName}"})
     ParkingPort selectByPortName(String portName);
+
+    @Select({"SELECT  COUNT(1)","FROM ",TABLE_NAME," WHERE parking_user_id = #{id}"})
+    Integer countByParkingUserId(Integer id);
 }

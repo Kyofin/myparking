@@ -201,7 +201,7 @@ public class PortalUserController {
 				"                            })\n" +
 				"                        } else {\n" +
 				"                            //弹出失败结果信息\n" +
-				"                            $(\"#info\").find(\".am-modal-bd\").text(resultObject.msg);\n" +
+				"                            $(\"#info\").find(\".am-modal-bd\").text(resultObject.error);\n" +
 				"                            infoModal.modal('toggle');\n" +
 				"                        }\n" +
 				"\n" +
