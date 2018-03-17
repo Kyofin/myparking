@@ -92,6 +92,25 @@ public class ParkingPortController {
     }
 
 
+    @RequestMapping(value = "/book/{portName}",method = RequestMethod.POST)
+    @ResponseBody
+    public  String bookPortByPortName(@PathVariable("portName") String portName)
+    {
+        try {
+            Map map =  parkingPortService.bookPortByPortName(portName);
+            if (map.isEmpty())
+            {
+                return MyparkingUtil.getJsonString(0, "预定车位成功");
+            }else
+                return MyparkingUtil.getJsonString(1,map,"预定车位失败");
+        }catch (Exception e)
+        {
+            LOGGER.error(e.getMessage());
+            return MyparkingUtil.getJsonString(1,"发生异常，预定车位失败");
+        }
+    }
+
+
     @RequestMapping(value = "/use/{portId}",method = RequestMethod.GET)
     @ResponseBody
     public  String usePort(@PathVariable("portId") Integer portId)

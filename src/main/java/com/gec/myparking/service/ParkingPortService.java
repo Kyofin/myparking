@@ -80,7 +80,7 @@ public class ParkingPortService {
 		return parkingPortMapper.selectAllPortsByStatus(status);
 	}
 
-	public String[] getPortNameListByStatus(int status) {
+	public String[] getPortNameArrayByStatus(int status) {
 		return parkingPortMapper.selectAllPortNameByStatus(status);
 
 	}
@@ -161,6 +161,39 @@ public class ParkingPortService {
 		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_EMPTY) {
 			outPort.setStatus(MyparkingUtil.PORT_STATUS_USED);
 			outPort.setParkingUserId(hostHolder.getUser().getId());
+			parkingPortMapper.updateByPrimaryKeySelective(outPort);
+		}
+
+		return map;
+	}
+
+	public Map bookPortByPortName(String portName) {
+		Map<String, Object> map = new HashMap();
+		if (portName == null) {
+			map.put("error", "车位名称不能为空");
+			return map;
+		}
+
+		ParkingPort outPort = parkingPortMapper.selectByPortName(portName);
+		if (outPort == null) {
+			map.put("error", "没有该车位");
+			return map;
+		}
+
+		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_USED) {
+			map.put("error", "车位已经被使用");
+			return map;
+		}
+
+		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_BOOKING) {
+			map.put("error", "车位已经被预定");
+			return map;
+		}
+		//车位状态为空时更新车位状态被预定
+		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_EMPTY) {
+			outPort.setStatus(MyparkingUtil.PORT_STATUS_BOOKING);
+			outPort.setParkingUserId(hostHolder.getUser().getId());
+			//持久化
 			parkingPortMapper.updateByPrimaryKeySelective(outPort);
 		}
 

@@ -178,7 +178,8 @@ public class SVGAdapter implements InitializingBean{
 				"  <rect height=\"6.14026\" width=\"2.66968\" y=\"2.72613\" x=\"62.56079\" stroke-linecap=\"null\" stroke-linejoin=\"null\" stroke-dasharray=\"null\" stroke-width=\"0\" stroke=\"#000000\" fill=\"#7f7f00\" id=\"B12\"/>\n" +
 				"  <rect height=\"6.14026\" width=\"2.66968\" y=\"2.72613\" x=\"66.01342\" stroke-linecap=\"null\" stroke-linejoin=\"null\" stroke-dasharray=\"null\" stroke-width=\"0\" stroke=\"#000000\" fill=\"#7f7f00\" id=\"B13\"/>\n" +
 				"  <rect height=\"6.14026\" width=\"2.66968\" y=\"2.72613\" x=\"70.16937\" stroke-linecap=\"null\" stroke-linejoin=\"null\" stroke-dasharray=\"null\" stroke-width=\"0\" stroke=\"#000000\" fill=\"#7f7f00\" id=\"B14\"/>\n" +
-				"  <rect height=\"6.14026\" width=\"2.66968\" y=\"2.72613\" x=\"74.57434\" stroke-linecap=\"null\" stroke-linejoin=\"null\" stroke-dasharray=\"null\" stroke-width=\"0\" stroke=\"#000000\" fill=\"#7f7f00\" id=\"B15\"/>\n";
+				"  <rect height=\"6.14026\" width=\"2.66968\" y=\"2.72613\" x=\"74.57434\" stroke-linecap=\"null\" stroke-linejoin=\"null\" stroke-dasharray=\"null\" stroke-width=\"0\" stroke=\"#000000\" fill=\"#7f7f00\" id=\"B15\"/>\n"+
+				"<text stroke=\"#000000\" transform=\"matrix(0.1425040364265442,0,0,0.10382583737373352,8.052423032931983,43.74450131319463) \" xml:space=\"preserve\" text-anchor=\"middle\" font-family=\"serif\" font-size=\"24\" id=\"svg_1\" y=\"39.71221\" x=\"193.57173\" stroke-width=\"0\" fill=\"#003f7f\">入口</text>";
 
 	}
 

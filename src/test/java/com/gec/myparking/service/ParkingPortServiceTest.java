@@ -2,13 +2,15 @@ package com.gec.myparking.service;
 
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.util.MyparkingUtil;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.*;
+import java.util.Arrays;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ParkingPortServiceTest {
@@ -25,9 +27,17 @@ public class ParkingPortServiceTest {
 
 	@Test
 	public void getPortNameByStatus() {
-		for (String portName : parkingPortService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_BOOKING)) {
+		for (String portName : parkingPortService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING)) {
 			System.out.println(portName);
 		}
+
+	}
+
+	@Test
+	public void testStringJoin(){
+		String[] bookingPortNameList = parkingPortService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
+		System.out.println(StringUtils.join(Arrays.asList(bookingPortNameList), ','));
+
 
 	}
 }

@@ -35,4 +35,7 @@ public interface ParkingPortMapper {
 
     @Select({"SELECT POSITION ","FROM ",TABLE_NAME," WHERE carport_name = #{carPortName}"})
     String selectPortPosition(String carPortName);
+
+    @Select({"SELECT  ",SELECT_FIELDS,"FROM ",TABLE_NAME," WHERE carport_name = #{carPortName}"})
+    ParkingPort selectByPortName(String portName);
 }

@@ -1,20 +1,16 @@
 package com.gec.myparking.controller.portal;
 
-import com.gec.myparking.AStart.SVGAdapter;
-import com.gec.myparking.controller.UserController;
 import com.gec.myparking.domain.LoginTicket;
-import com.gec.myparking.domain.ParkingPort;
-import com.gec.myparking.service.ParkingOrderService;
 import com.gec.myparking.service.ParkingPortService;
 import com.gec.myparking.service.QiuNiuService;
 import com.gec.myparking.service.UserService;
 import com.gec.myparking.util.MyparkingUtil;
+import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,8 +19,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -72,26 +68,28 @@ public class PortalUserController {
 		model.addAttribute("svg", initSVG);
 
 		//判断车位状态添加CSS
-		String[] usedPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_USED);
-		String[] emptyPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
-		String[] bookingPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
+		String[] usedPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_USED);
+		String[] emptyPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+		String[] bookingPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
 
 		//emptyCssSB
 		StringBuilder emptyCssSB = new StringBuilder();
-		String emptyCssResult = getCssResult(emptyPortNameList, emptyCssSB, "#00cc00");
+		String emptyCssResult = getCssResult(emptyPortNameArray, emptyCssSB, "#00cc00");
 		model.addAttribute("emptyCss", emptyCssResult);
 
 		//usedCssSB
 		StringBuilder usedCssSB = new StringBuilder();
-		String usedCssResult = getCssResult(usedPortNameList, usedCssSB, "#585858");
+		String usedCssResult = getCssResult(usedPortNameArray, usedCssSB, "#585858");
 		model.addAttribute("usedCssSB", usedCssResult);
 
 		//bookingCssSB
 		StringBuilder bookingCssSB = new StringBuilder();
-		String bookingCssResult = getCssResult(bookingPortNameList, bookingCssSB, "#FAFA01");
+		String bookingCssResult = getCssResult(bookingPortNameArray, bookingCssSB, "#FAFA01");
 		model.addAttribute("bookingCssSB", bookingCssResult);
 
-		//增加js事件 todo
+		//增加js事件
+		String jsResult = getJsResult(usedPortNameArray,bookingPortNameArray,emptyPortNameArray);
+		model.addAttribute("jsResult",jsResult);
 
 		//转发视图
 		return "portal/bookPortPage";
@@ -119,23 +117,23 @@ public class PortalUserController {
 		model.addAttribute("path",path);
 
 		//判断车位状态添加CSS
-		String[] usedPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_USED);
-		String[] emptyPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
-		String[] bookingPortNameList = portService.getPortNameListByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
+		String[] usedPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_USED);
+		String[] emptyPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+		String[] bookingPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
 
 		//emptyCssSB
 		StringBuilder emptyCssSB = new StringBuilder();
-		String emptyCssResult = getCssResult(emptyPortNameList, emptyCssSB, "#00cc00");
+		String emptyCssResult = getCssResult(emptyPortNameArray, emptyCssSB, "#00cc00");
 		model.addAttribute("emptyCss", emptyCssResult);
 
 		//usedCssSB
 		StringBuilder usedCssSB = new StringBuilder();
-		String usedCssResult = getCssResult(usedPortNameList, usedCssSB, "#585858");
+		String usedCssResult = getCssResult(usedPortNameArray, usedCssSB, "#585858");
 		model.addAttribute("usedCssSB", usedCssResult);
 
 		//bookingCssSB
 		StringBuilder bookingCssSB = new StringBuilder();
-		String bookingCssResult = getCssResult(bookingPortNameList, bookingCssSB, "#FAFA01");
+		String bookingCssResult = getCssResult(bookingPortNameArray, bookingCssSB, "#FAFA01");
 		model.addAttribute("bookingCssSB", bookingCssResult);
 
 
@@ -143,10 +141,91 @@ public class PortalUserController {
 		return "portal/getPath";
 	}
 
-	private String getCssResult(String[] portNameList, StringBuilder CssSB, String color) {
-		for (int i = 0; i < portNameList.length; i++) {
-			CssSB.append("#" + portNameList[i]);
-			if (i == portNameList.length - 1) {
+
+	private String getJsResult (String[] usedPortNameArray,String[] bookedPortNameArray,String[] emptyPortNameArray){
+		for (int i = 0; i < usedPortNameArray.length; i++) {
+			usedPortNameArray[i] = "#"+usedPortNameArray[i];
+		}
+		for (int i = 0; i < bookedPortNameArray.length; i++) {
+			bookedPortNameArray[i] = "#"+bookedPortNameArray[i];
+		}
+		for (int i = 0; i < emptyPortNameArray.length; i++) {
+			emptyPortNameArray[i] = "#"+emptyPortNameArray[i];
+		}
+
+
+		String string = "<script>\n" +
+				"    $(function () {\n" +
+				"        //定义提示模态框\n" +
+				"        var infoModal = $('#info');\n" +
+				"        //定义loading模态框\n" +
+				"        var loadingModal = $('#my-modal-loading');\n" +
+				"\n" +
+				"        //绑定被预定车位的模态框事件\n" +
+				"        $('"+ StringUtils.join(Arrays.asList(bookedPortNameArray))+"').on('click', function (e) {\n" +
+				"            //更改模态框中提示信息\n" +
+				"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被预定\");\n" +
+				"            infoModal.modal('toggle');\n" +
+				"        });\n" +
+				"        //绑定被使用车位的模态框事件\n" +
+				"        $('"+ StringUtils.join(Arrays.asList(usedPortNameArray))+"').on('click', function (e) {\n" +
+				"            //更改模态框中提示信息\n" +
+				"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被使用，请选择其他车位\");\n" +
+				"            infoModal.modal('toggle');\n" +
+				"        });\n" +
+				"\n" +
+				"        //绑定可使用车位的模态框事件\n" +
+				"        $('"+ StringUtils.join(Arrays.asList(emptyPortNameArray))+"').on('click', function () {\n" +
+				"            var carPortName = this.id;\n" +
+				"\n" +
+				"            //更改模态框中提示信息\n" +
+				"            $(\"#confirmInfo\").find(\".am-modal-bd\").text(\"你确定要预约\" + carPortName + \"车位吗？\");\n" +
+				"\n" +
+				"            $('#confirmInfo').modal({\n" +
+				"                relatedTarget: this,\n" +
+				"                onConfirm: function (options) {\n" +
+				"                    //todo 发送预定车位请求\n" +
+				"                    $.post(\"/parkingport/book/\" + carPortName, {}, function (res) {\n" +
+				"                        var resultObject = JSON.parse(res);\n" +
+				"\n" +
+				"                        //预定成功跳转页面显示路径\n" +
+				"                        if (resultObject.code == 0) {\n" +
+				"                            infoModal.find(\".am-modal-bd\").text(resultObject.msg + \"，即将为你显示引导路径！\");\n" +
+				"                            infoModal.modal('toggle');\n" +
+				"                            $(\"#info\").find(\".am-modal-btn\").on(\"click\", function () {\n" +
+				"                                loadingModal.modal(\"open\")\n" +
+				"                                setTimeout( function () {\n" +
+				"                                    window.location.href = \"/portal/user/getPath?endPortName=\" + carPortName;\n" +
+				"\n" +
+				"                                },1000)\n" +
+				"                            })\n" +
+				"                        } else {\n" +
+				"                            //弹出失败结果信息\n" +
+				"                            $(\"#info\").find(\".am-modal-bd\").text(resultObject.msg);\n" +
+				"                            infoModal.modal('toggle');\n" +
+				"                        }\n" +
+				"\n" +
+				"                    });\n" +
+				"\n" +
+				"\n" +
+				"                },\n" +
+				"                // closeOnConfirm: false,\n" +
+				"                closeViaDimmer: false,\n" +
+				"                onCancel: function () {\n" +
+				"                    //alert('不弄了');\n" +
+				"                }\n" +
+				"            });\n" +
+				"        });\n" +
+				"    });\n" +
+				"</script>";
+
+		return string;
+	}
+
+	private String getCssResult(String[] portNameArray, StringBuilder CssSB, String color) {
+		for (int i = 0; i < portNameArray.length; i++) {
+			CssSB.append("#" + portNameArray[i]);
+			if (i == portNameArray.length - 1) {
 				CssSB.append("{fill:" + color + ";}");
 				continue;
 			}
