@@ -11,6 +11,8 @@ public class SVGAdapter implements InitializingBean{
 
 	private int[][] mapArray;
 
+	private static final String SVG_HEAD="<svg width=\"365\" height=\"250\" viewBox=\"0 0 80 50\"  xmlns=\"http://www.w3.org/2000/svg\" xmlns:svg=\"http://www.w3.org/2000/svg\">";
+
 	//入口点
 	public Node enterNode = new Node(30, 45);
 
@@ -190,7 +192,7 @@ public class SVGAdapter implements InitializingBean{
 	 */
 	public String getInitSVG(){
 		//拼接头
-		String result = "<svg width=\"800\" height=\"500\" viewBox=\"0 0 80 50\"  xmlns=\"http://www.w3.org/2000/svg\" xmlns:svg=\"http://www.w3.org/2000/svg\">";
+		String result = SVG_HEAD;
 		result+=getInitSVGStrNoHeadAndFoot();
 		result+="</svg>\n";
 		return result;
@@ -201,7 +203,7 @@ public class SVGAdapter implements InitializingBean{
 	 */
 	public String getResultSVG(Node beginNode,Node endNode ){
 		//拼接头
-		String result = "<svg width=\"800\" height=\"500\" viewBox=\"0 0 80 50\"  xmlns=\"http://www.w3.org/2000/svg\" xmlns:svg=\"http://www.w3.org/2000/svg\">";
+		String result = SVG_HEAD;
 		//拼接原始图像
 		result += getInitSVGStrNoHeadAndFoot();
 		//初始化地图信息

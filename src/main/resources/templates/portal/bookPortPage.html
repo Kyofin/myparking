@@ -29,13 +29,68 @@
 
 <#include "/portal/header.html">
 
+<ol class="am-breadcrumb am-breadcrumb-slash">
+    <li><a href="/portal/user/indexPage" class="am-icon-home am-icon-md"><span style="font-size: 16px;">首页</span></a></li>
+    <li class="am-active"><span style="font-size: 16px;">预订车位</span></li>
+</ol>
 
 <div class="am-g">
 
 
+    <#if (portList?size>0) >
+
+    <!--表格-->
+    <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">已预约车位</strong> / <small>Table</small></div>
+    </div>
+    <div class="am-u-sm-12">
+        <form class="am-form">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                <tr>
+                    <th class="table-check"><input type="checkbox"></th>
+                    <th class="table-id">ID</th>
+                    <th class="table-carPortName">车位名称</th>
+                    <th class="table-set">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list portList as port>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td>${port.id}</td>
+                    <td><a href="#">${port.carportName}</a></td>
+                    <td>
+                        <div class="am-btn-toolbar">
+                            <div class="am-btn-group am-btn-group-xs">
+                                <a href="/portal/user/getPath?endPortName=${port.carportName}" class="am-btn am-btn-success am-btn-xs ">
+                                    <span
+                                            class="am-icon-info-circle" ></span> 获取指引路线
+                                </a>
+                            </div>
+                            <div class="am-btn-group am-btn-group-xs">
+                                <a class="am-btn am-btn-danger am-btn-xs cancelBtn">
+                                    <input type="hidden" value="${port.id}"/>
+                                    <span
+                                            class="am-icon-info-circle" ></span> 取消预定
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </#list>
+
+                </tbody>
+            </table>
+
+
+        </form>
+    </div>
+
+<#else>
     <!--svg初始化图像-->
     ${svg}
-
+</#if>
 
 </div>
 
@@ -77,10 +132,90 @@
 
 <#include "/portal/footer.html">
 
-
 </body>
 <!--自定义脚本-->
-${jsResult}
 
+"<script>
+    $(function () {
+        //定义提示模态框
+        var infoModal = $('#info');
+        //定义loading模态框
+        var loadingModal = $('#my-modal-loading');
+
+        <!--后端返回的js-->
+        ${jsResult}
+
+
+        function confirmFun() {
+            var carPortName = this.id;
+
+            //更改模态框中提示信息
+            $("#confirmInfo").find(".am-modal-bd").text("你确定要预约" + carPortName + "车位吗？");
+
+
+            //更改模态框按钮的触发事件
+            $('#confirmInfo').modal({
+                relatedTarget: this,
+                onConfirm: function (options) {
+                    var link = $(this.relatedTarget);
+                    //发送预定车位请求
+                    $.post("/parkingport/book/" + link.attr("id"), {}, function (res) {
+                        var resultObject = JSON.parse(res);
+
+                        //预定成功跳转页面显示路径
+                        if (resultObject.code == 0) {
+                            infoModal.find(".am-modal-bd").text(resultObject.msg + "，即将为你显示引导路径！");
+                            infoModal.modal('toggle');
+                            $("#info").find(".am-modal-btn").on("click", function () {
+                                loadingModal.modal("open")
+                                setTimeout( function () {
+                                    window.location.href = "/portal/user/getPath?endPortName=" + link.attr("id");
+
+                                },1000)
+                            })
+                        } else {
+                            //弹出失败结果信息
+                            $("#info").find(".am-modal-bd").text(resultObject.error);
+                            infoModal.modal('toggle');
+                        }
+
+                    });
+
+
+                },
+                // closeOnConfirm: false,
+                closeViaDimmer: false,
+                onCancel: function () {
+                    //alert('不弄了');
+                }
+            });
+        }
+
+
+        $(".cancelBtn").on("click", function () {
+            $.ajax({
+                url: '/parkingport/cancel',
+                data: { portId : $("input", this).val() ,_method:'post'},
+                type: 'post',
+                success: function(result) {
+                    var resultObject = JSON.parse(result);
+                    if (resultObject.code == 0) {
+                        infoModal.find(".am-modal-bd").text(resultObject.msg);
+                        infoModal.modal('toggle');
+                        window.location.reload();//刷新当前页面.
+                    } else {
+                        //弹出失败结果信息
+                        infoModal.find(".am-modal-bd").text(resultObject.error);
+                        infoModal.modal('toggle');
+                        window.location.reload();//刷新当前页面.
+                    }
+                }
+            });
+        })
+
+    });
+
+
+</script>
 
 </html>

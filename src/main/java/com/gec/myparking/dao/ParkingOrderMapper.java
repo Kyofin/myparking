@@ -26,4 +26,7 @@ public interface ParkingOrderMapper {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME})
     List<ParkingOrder> selectAllOrders();
+
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId}"})
+    List<ParkingOrder>  selectAllOrdersByUserId(Integer userId);
 }

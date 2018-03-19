@@ -25,4 +25,7 @@ public interface CarMapper {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME})
     List<Car> selectAllCars();
+
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE car_user_id=#{userId}"})
+	List<Car> selectAllCarsByUserId(Integer userId);
 }

@@ -24,55 +24,53 @@ import java.util.Map;
 @Controller
 @RequestMapping("/order")
 public class ParkingOrderController {
-    @Autowired
-    private ParkingOrderService parkingOrderService;
+	@Autowired
+	private ParkingOrderService parkingOrderService;
 
-    @Autowired
-    private ParkingPortService parkingPortService;
+	@Autowired
+	private ParkingPortService parkingPortService;
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParkingOrderController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ParkingOrderController.class);
 
-    @RequestMapping("/orderPage")
-    public  String portPage()
-    {
-        return "order/orderList";
-    }
+	@RequestMapping("/orderPage")
+	public String portPage() {
+		return "order/orderList";
+	}
 
-    @RequestMapping(value = "/orders",method = RequestMethod.GET)
-    @ResponseBody
-    public String getParkingPorts(@RequestParam(value = "page",required = false) Integer page,
-                                  @RequestParam(value = "limit",required = false) Integer limit)
-    {
-        try {
-            PageInfo<ParkingOrder> parkingOrderPageInfo= parkingOrderService.getOrders(page,limit);
-            List<Map> dataList = new ArrayList<>();
-            Map<String,Object> map = new HashMap<>();
-            map.put("count",parkingOrderPageInfo.getTotal());
-            //组装data的展示数据
-            for (ParkingOrder order: parkingOrderPageInfo.getList()) {
-                Map dataMap = new HashMap();
-                dataMap.put("id",order.getId());
-                //获取车位的名字
-            dataMap.put("carPortName",parkingPortService.getPortById(order.getCarPortId()).getCarportName());
-                dataMap.put("orderUser",userService.getUserById(order.getUserId()).getUserName());
-                dataMap.put("beginTime",order.getBeginTime());
-                dataMap.put("endTime",order.getEndTime());
-                dataMap.put("price",order.getPrice());
-                dataMap.put("duration",order.getDuration());
-                dataList.add(dataMap);
-            }
-            map.put("data",dataList);
-            return MyparkingUtil.getJsonString(0,map,"获取订单列表成功");
+	@RequestMapping(value = "/orders", method = RequestMethod.GET)
+	@ResponseBody
+	public String getParkingPorts(@RequestParam(value = "page", required = false) Integer page,
+								  @RequestParam(value = "limit", required = false) Integer limit) {
+		try {
+			PageInfo<ParkingOrder> parkingOrderPageInfo = parkingOrderService.getOrders(page, limit);
+			List<Map> dataList = new ArrayList<>();
+			Map<String, Object> map = new HashMap<>();
+			map.put("count", parkingOrderPageInfo.getTotal());
+			//组装data的展示数据
+			for (ParkingOrder order : parkingOrderPageInfo.getList()) {
+				Map dataMap = new HashMap();
+				dataMap.put("id", order.getId());
+				//获取车位的名字
+				dataMap.put("carPortName", parkingPortService.getPortById(order.getCarPortId()).getCarportName());
+				dataMap.put("orderUser", userService.getUserById(order.getUserId()).getUserName());
+				dataMap.put("beginTime", order.getBeginTime());
+				dataMap.put("endTime", order.getEndTime());
+				dataMap.put("price", order.getPrice());
+				dataMap.put("duration", order.getDuration());
+				dataMap.put("status", order.getStatus());
+				dataList.add(dataMap);
+			}
+			map.put("data", dataList);
+			return MyparkingUtil.getJsonString(0, map, "获取订单列表成功");
 
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-            LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，获取订单列表失败");
-        }
-    }
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return MyparkingUtil.getJsonString(1, "发生异常，获取订单列表失败");
+		}
+	}
 
 }

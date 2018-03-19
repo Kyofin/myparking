@@ -2,6 +2,7 @@ package com.gec.myparking.dao;
 
 import com.gec.myparking.domain.ParkingPort;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -39,6 +40,9 @@ public interface ParkingPortMapper {
     @Select({"SELECT  ",SELECT_FIELDS,"FROM ",TABLE_NAME," WHERE carport_name = #{carPortName}"})
     ParkingPort selectByPortName(String portName);
 
-    @Select({"SELECT  COUNT(1)","FROM ",TABLE_NAME," WHERE parking_user_id = #{id}"})
-    Integer countByParkingUserId(Integer id);
+    @Select({"SELECT  COUNT(1)","FROM ",TABLE_NAME," WHERE parking_user_id = #{id} AND status = #{status}"})
+    Integer countByParkingUserIdAndStatus(@Param("id") Integer id ,@Param("status") Integer status);
+
+    @Select({"SELECT  ",SELECT_FIELDS,"FROM ",TABLE_NAME," WHERE parking_user_id = #{id} AND status = #{status}"})
+    List<ParkingPort> selectByUserIdAndStatus (@Param("id") Integer id ,@Param("status") Integer status);
 }

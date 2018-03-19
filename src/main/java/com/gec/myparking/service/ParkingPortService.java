@@ -80,6 +80,10 @@ public class ParkingPortService {
 		return parkingPortMapper.selectAllPortsByStatus(status);
 	}
 
+	public List<ParkingPort> getPortsByUserIdAndStatus(Integer userID,Integer status) {
+		return parkingPortMapper.selectByUserIdAndStatus(userID,status);
+	}
+
 	public String[] getPortNameArrayByStatus(int status) {
 		return parkingPortMapper.selectAllPortNameByStatus(status);
 
@@ -190,9 +194,10 @@ public class ParkingPortService {
 			return map;
 		}
 
-		Integer countByUserId = parkingPortMapper.countByParkingUserId(hostHolder.getUser().getId());
+		//
+		Integer countByUserId = parkingPortMapper.countByParkingUserIdAndStatus(hostHolder.getUser().getId(),MyparkingUtil.PORT_STATUS_BOOKING);
 		if (countByUserId >0) {
-			map.put("error", "你已经过预约车位，请不要重复预约车位");
+			map.put("error", "你已经预约车位，请不要重复预约");
 			return map;
 		}
 
@@ -203,6 +208,25 @@ public class ParkingPortService {
 			//持久化
 			parkingPortMapper.updateByPrimaryKeySelective(outPort);
 		}
+
+		return map;
+	}
+
+	public Map cancelPort(Integer portId) {
+		Map<String,Object> map = new HashMap<>();
+		if (portId==null){
+			map.put("error","车位id不能为空");
+			return map;
+		}
+
+		//数据库中获取该车位
+		ParkingPort outPort = parkingPortMapper.selectByPrimaryKey(portId);
+		//更新车位状态为空
+		outPort.setStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+		//更新车位用户为空
+		outPort.setParkingUserId(null);
+		//持久化数据
+		parkingPortMapper.updateByPrimaryKey(outPort);
 
 		return map;
 	}

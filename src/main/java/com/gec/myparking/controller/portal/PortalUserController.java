@@ -1,10 +1,10 @@
 package com.gec.myparking.controller.portal;
 
-import com.gec.myparking.domain.LoginTicket;
-import com.gec.myparking.service.ParkingPortService;
-import com.gec.myparking.service.QiuNiuService;
-import com.gec.myparking.service.UserService;
+import com.gec.myparking.domain.*;
+import com.gec.myparking.dto.ParkingOrderDTO;
+import com.gec.myparking.service.*;
 import com.gec.myparking.util.MyparkingUtil;
+import com.sun.xml.internal.bind.v2.TODO;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +21,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,12 +36,38 @@ public class PortalUserController {
 	private UserService userService;
 
 	@Autowired
+	private HostHolder hostHolder;
+
+	@Autowired
 	private ParkingPortService portService;
+
+	@Autowired
+	private CarService carService;
+
+	@Autowired
+	private ParkingOrderService orderService;
 
 
 	@RequestMapping("loginPage")
 	public String loginPage() {
 		return "portal/login";
+	}
+
+	@RequestMapping("addCarPage")
+	public String addCarPage(Model model) {
+		//获取绑定车辆
+		List<Car> cars =carService.getCarsByUserId(hostHolder.getUser().getId());
+		model.addAttribute("cars",cars);
+		model.addAttribute("carUserId",hostHolder.getUser().getId());
+		return "portal/addCarPage";
+	}
+
+	@RequestMapping("orderPage")
+	public String orderPage(Model model) {
+		//获取用户关联订单
+		List<ParkingOrderDTO> orders = orderService.getOrdersByUserId(hostHolder.getUser().getId());
+		model.addAttribute("orders",orders);
+		return "portal/orderPage";
 	}
 
 	@RequestMapping("indexPage")
@@ -55,7 +82,7 @@ public class PortalUserController {
 
 	/**
 	 * 预订车位的页面（显示各种车位状态，不同状态车位触发事件不一样。）
-	 *
+	 * 已修复bug：取消原本车位后确认其他车位，显示的路线是之前取消的车位的引导路径
 	 * @param model
 	 * @return
 	 */
@@ -90,6 +117,10 @@ public class PortalUserController {
 		//增加js事件
 		String jsResult = getJsResult(usedPortNameArray,bookingPortNameArray,emptyPortNameArray);
 		model.addAttribute("jsResult",jsResult);
+
+		//查询是否已经绑定车位
+		List<ParkingPort> portList = portService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_BOOKING);
+		model.addAttribute("portList",portList);
 
 		//转发视图
 		return "portal/bookPortPage";
@@ -154,13 +185,7 @@ public class PortalUserController {
 		}
 
 
-		String string = "<script>\n" +
-				"    $(function () {\n" +
-				"        //定义提示模态框\n" +
-				"        var infoModal = $('#info');\n" +
-				"        //定义loading模态框\n" +
-				"        var loadingModal = $('#my-modal-loading');\n" +
-				"\n" +
+		String string =
 				"        //绑定被预定车位的模态框事件\n" +
 				"        $('"+ StringUtils.join(Arrays.asList(bookedPortNameArray))+"').on('click', function (e) {\n" +
 				"            //更改模态框中提示信息\n" +
@@ -175,49 +200,7 @@ public class PortalUserController {
 				"        });\n" +
 				"\n" +
 				"        //绑定可使用车位的模态框事件\n" +
-				"        $('"+ StringUtils.join(Arrays.asList(emptyPortNameArray))+"').on('click', function () {\n" +
-				"            var carPortName = this.id;\n" +
-				"\n" +
-				"            //更改模态框中提示信息\n" +
-				"            $(\"#confirmInfo\").find(\".am-modal-bd\").text(\"你确定要预约\" + carPortName + \"车位吗？\");\n" +
-				"\n" +
-				"            $('#confirmInfo').modal({\n" +
-				"                relatedTarget: this,\n" +
-				"                onConfirm: function (options) {\n" +
-				"                    //todo 发送预定车位请求\n" +
-				"                    $.post(\"/parkingport/book/\" + carPortName, {}, function (res) {\n" +
-				"                        var resultObject = JSON.parse(res);\n" +
-				"\n" +
-				"                        //预定成功跳转页面显示路径\n" +
-				"                        if (resultObject.code == 0) {\n" +
-				"                            infoModal.find(\".am-modal-bd\").text(resultObject.msg + \"，即将为你显示引导路径！\");\n" +
-				"                            infoModal.modal('toggle');\n" +
-				"                            $(\"#info\").find(\".am-modal-btn\").on(\"click\", function () {\n" +
-				"                                loadingModal.modal(\"open\")\n" +
-				"                                setTimeout( function () {\n" +
-				"                                    window.location.href = \"/portal/user/getPath?endPortName=\" + carPortName;\n" +
-				"\n" +
-				"                                },1000)\n" +
-				"                            })\n" +
-				"                        } else {\n" +
-				"                            //弹出失败结果信息\n" +
-				"                            $(\"#info\").find(\".am-modal-bd\").text(resultObject.error);\n" +
-				"                            infoModal.modal('toggle');\n" +
-				"                        }\n" +
-				"\n" +
-				"                    });\n" +
-				"\n" +
-				"\n" +
-				"                },\n" +
-				"                // closeOnConfirm: false,\n" +
-				"                closeViaDimmer: false,\n" +
-				"                onCancel: function () {\n" +
-				"                    //alert('不弄了');\n" +
-				"                }\n" +
-				"            });\n" +
-				"        });\n" +
-				"    });\n" +
-				"</script>";
+				"        $('"+ StringUtils.join(Arrays.asList(emptyPortNameArray))+"').on('click', confirmFun);";
 
 		return string;
 	}
@@ -288,6 +271,9 @@ public class PortalUserController {
 			return MyparkingUtil.getJsonString(1, "上传图片失败");
 		}
 	}
+
+
+
 
 
 }

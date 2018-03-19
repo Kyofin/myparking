@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <title>add Car Page </title>
+    <#include "/portal/amazedHead.html">
+    <style>
+        .header {
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 200%;
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .header p {
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<#include "/portal/header.html">
+
+<ol class="am-breadcrumb am-breadcrumb-slash">
+    <li><a href="/portal/user/indexPage" class="am-icon-home am-icon-md"><span style="font-size: 16px;">首页</span></a>
+    </li>
+    <li class="am-active"><span style="font-size: 16px;">绑定车辆</span></li>
+</ol>
+
+<div class="am-g">
+
+    <form class="am-form">
+        <fieldset>
+
+            <div class="am-form-group  am-form-group-lg">
+                <label for="carNumber">车牌号码</label>
+                <input type="text" class="" name="carNumber" id="carNumber" placeholder="输入车牌号码">
+            </div>
+
+            <input type="hidden" id="carUserId" value="${carUserId}"/>
+
+
+            <p>
+                <a id="submitBtn" class="am-btn am-btn-default">添加</a>
+            </p>
+        </fieldset>
+    </form>
+
+
+    <div class="am-modal am-modal-alert" tabindex="-1" id="info">
+        <div class="am-modal-dialog">
+            <div class="am-modal-bd">
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--表格-->
+    <div class="am-cf am-padding am-padding-bottom-0">
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">已绑定车辆</strong> / <small>Table</small></div>
+    </div>
+    <div class="am-u-sm-12">
+        <form class="am-form">
+            <table class="am-table am-table-striped am-table-hover table-main">
+                <thead>
+                <tr>
+                    <th class="table-check"><input type="checkbox"></th>
+                    <th class="table-id">ID</th>
+                    <th class="table-carNumber">车牌号码</th>
+                    <th class="table-set">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <#list cars as car>
+                 <tr>
+                    <td><input type="checkbox"></td>
+                    <td>${car.id}</td>
+                    <td><a href="#">${car.carNumber}</a></td>
+                    <td>
+                        <div class="am-btn-toolbar">
+                            <div class="am-btn-group am-btn-group-xs">
+
+                                <a  class="am-btn am-btn-default am-btn-xs am-text-danger deleteBtn">
+                                   <input type="hidden" value="${car.id}"/>
+                                    <span
+                                        class="am-icon-trash-o" ></span> 删除
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </#list>
+
+                </tbody>
+            </table>
+            <div class="am-cf">
+                共 ${cars?size} 条记录
+
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+
+<#include "/portal/footer.html">
+
+
+</body>
+<!--自定义脚本-->
+
+
+<script>
+    $(function () {
+        //定义提示模态框
+        var infoModal = $('#info');
+
+
+        $("#submitBtn").on("click", function () {
+            $.post("/car/cars", {
+                carNumber: $("#carNumber").val(),  //车牌号码
+                carUserId: $("#carUserId").val(),  //车主id
+            }, function (res) {
+                var resultObject = JSON.parse(res);
+                if (resultObject.code == 0) {
+                    infoModal.find(".am-modal-bd").text(resultObject.msg);
+                    infoModal.modal('toggle');
+                } else {
+                    //弹出失败结果信息
+                    infoModal.find(".am-modal-bd").text(resultObject.error);
+                    infoModal.modal('toggle');
+                }
+
+            });
+        })
+
+
+        $(".deleteBtn").on("click", function () {
+            $.ajax({
+                url: '/car/cars',
+                data: { id : $("input", this).val() ,_method:'delete'},
+                type: 'post',
+                success: function(result) {
+                    var resultObject = JSON.parse(result);
+                    if (resultObject.code == 0) {
+                        infoModal.find(".am-modal-bd").text(resultObject.msg);
+                        infoModal.modal('toggle');
+                        window.location.reload();//刷新当前页面.
+                    } else {
+                        //弹出失败结果信息
+                        infoModal.find(".am-modal-bd").text(resultObject.error);
+                        infoModal.modal('toggle');
+                        window.location.reload();//刷新当前页面.
+                    }
+                }
+            });
+        })
+
+
+
+
+    });
+
+
+</script>
+
+</html>

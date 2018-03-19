@@ -26,7 +26,20 @@ layui.use(['form','layer','table','laytpl'],function(){
                     return '<span class="layui-blue">'+d.orderUser+' </span>';
             }},
             {field: 'price', title: '价格', minWidth:50, align:"center"},
-            {field: 'duration', title: '持续时间（Hour）', minWidth:100, align:"center"},
+            {field: 'status', title: '状态', minWidth:50, align:"center",templet:function(d){
+                    if (d.status==0)
+                    {
+                        return '<button class="layui-btn layui-btn-radius layui-btn-sm layui-btn-warm">未支付</button>'
+                    }else if (d.status==2)
+                    {
+                        return '<button class="layui-btn layui-btn-radius layui-btn-sm layui-btn-primary layui-btn-disabled">订单已取消</button>'
+                    }else if (d.status==1)
+                    {
+                        return '<button class="layui-btn layui-btn-radius layui-btn-sm layui-btn-green">已支付</button>'
+
+                    }
+                }},
+            {field: 'duration', title: '持续时间（Hour）', minWidth:200, align:"center"},
             {field: 'beginTime', title: '创建时间', minWidth:200, align:"center",templet:function (d) {
                     var data = new Date(d.beginTime);
                     return data.getFullYear()+"年"+(data.getMonth()+1)+"月"+data.getHours()+"时"+data.getMinutes()+"分";

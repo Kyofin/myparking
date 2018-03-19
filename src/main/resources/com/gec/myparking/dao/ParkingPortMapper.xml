@@ -78,9 +78,7 @@
       <if test="parkingUserId != null" >
         parking_user_id = #{parkingUserId,jdbcType=INTEGER},
       </if>
-      <if test="position != null" >
-        position = #{position,jdbcType=VARCHAR},
-      </if>
+
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -88,8 +86,8 @@
     update parkingport
     set carport_name = #{carportName,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      parking_user_id = #{parkingUserId,jdbcType=INTEGER},
-      position = #{position,jdbcType=VARCHAR}
+      parking_user_id = #{parkingUserId,jdbcType=INTEGER}
+
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
