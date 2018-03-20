@@ -63,7 +63,9 @@
 
     <!--表格-->
     <div class="am-cf am-padding am-padding-bottom-0">
-        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">已绑定车辆</strong> / <small>Table</small></div>
+        <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">已绑定车辆</strong> /
+            <small>Table</small>
+        </div>
     </div>
     <div class="am-u-sm-12">
         <form class="am-form">
@@ -78,7 +80,7 @@
                 </thead>
                 <tbody>
                 <#list cars as car>
-                 <tr>
+                <tr>
                     <td><input type="checkbox"></td>
                     <td>${car.id}</td>
                     <td><a href="#">${car.carNumber}</a></td>
@@ -86,10 +88,10 @@
                         <div class="am-btn-toolbar">
                             <div class="am-btn-group am-btn-group-xs">
 
-                                <a  class="am-btn am-btn-default am-btn-xs am-text-danger deleteBtn">
-                                   <input type="hidden" value="${car.id}"/>
+                                <a class="am-btn am-btn-default am-btn-xs am-text-danger deleteBtn">
+                                    <input type="hidden" value="${car.id}"/>
                                     <span
-                                        class="am-icon-trash-o" ></span> 删除
+                                            class="am-icon-trash-o"></span> 删除
                                 </a>
                             </div>
                         </div>
@@ -133,6 +135,9 @@
                 if (resultObject.code == 0) {
                     infoModal.find(".am-modal-bd").text(resultObject.msg);
                     infoModal.modal('toggle');
+                    setTimeout(function () {
+                        location.reload();
+                    }, 1000);
                 } else {
                     //弹出失败结果信息
                     infoModal.find(".am-modal-bd").text(resultObject.error);
@@ -146,25 +151,27 @@
         $(".deleteBtn").on("click", function () {
             $.ajax({
                 url: '/car/cars',
-                data: { id : $("input", this).val() ,_method:'delete'},
+                data: {id: $("input", this).val(), _method: 'delete'},
                 type: 'post',
-                success: function(result) {
+                success: function (result) {
                     var resultObject = JSON.parse(result);
                     if (resultObject.code == 0) {
                         infoModal.find(".am-modal-bd").text(resultObject.msg);
                         infoModal.modal('toggle');
-                        window.location.reload();//刷新当前页面.
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
                     } else {
                         //弹出失败结果信息
                         infoModal.find(".am-modal-bd").text(resultObject.error);
-                        infoModal.modal('toggle');
-                        window.location.reload();//刷新当前页面.
+                        infoModal.modal('open');
+                        setTimeout(function () {
+                            location.reload();
+                        }, 1000);
                     }
                 }
             });
         })
-
-
 
 
     });

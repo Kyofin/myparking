@@ -4,7 +4,9 @@ import com.gec.myparking.AStart.Node;
 import com.gec.myparking.AStart.SVGAdapter;
 import com.gec.myparking.dao.ParkingPortMapper;
 import com.gec.myparking.domain.HostHolder;
+import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
+import com.gec.myparking.util.Const;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +29,9 @@ public class ParkingPortService {
 
 	@Autowired
 	SVGAdapter svgAdapter;
+
+	@Autowired
+	ParkingOrderService orderService;
 
 
 	/**
@@ -132,7 +138,7 @@ public class ParkingPortService {
 	}
 
 
-	public Map usePort(Integer portId) {
+	public Map usePort(Integer portId) throws Exception {
 		Map<String, Object> map = new HashMap();
 		if (portId == null) {
 			map.put("error", "车位id不能为空");
@@ -155,21 +161,34 @@ public class ParkingPortService {
 			if (outPort.getParkingUserId() != hostHolder.getUser().getId())
 				map.put("error", "车位已经被他人预定");
 			else {
+				//更新车位
 				outPort.setStatus(MyparkingUtil.PORT_STATUS_USED);
 				outPort.setParkingUserId(hostHolder.getUser().getId());
+				//生成订单
+				ParkingOrder order = orderService.creatNewOrder(portId,hostHolder.getUser().getId());
+
+				//持久化数据
 				parkingPortMapper.updateByPrimaryKeySelective(outPort);
+				orderService.insertOrder(order);
 			}
 			return map;
 		}
-		//车位状态为空时更新车位状态被使用
-		if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_EMPTY) {
+		//车位状态为空时更新车位状态被使用???
+		/*if (outPort.getStatus() == MyparkingUtil.PORT_STATUS_EMPTY) {
 			outPort.setStatus(MyparkingUtil.PORT_STATUS_USED);
 			outPort.setParkingUserId(hostHolder.getUser().getId());
+			//生成订单
+			ParkingOrder order = orderService.creatNewOrder(portId, hostHolder.getUser().getId());
+			//持久化数据
 			parkingPortMapper.updateByPrimaryKeySelective(outPort);
-		}
+			orderService.insertOrder(order);
+		}*/
 
+		map.put("error","你并未预订该车位！");
 		return map;
 	}
+
+
 
 	public Map bookPortByPortName(String portName) {
 		Map<String, Object> map = new HashMap();

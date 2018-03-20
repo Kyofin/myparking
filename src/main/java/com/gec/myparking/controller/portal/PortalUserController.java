@@ -3,8 +3,12 @@ package com.gec.myparking.controller.portal;
 import com.gec.myparking.domain.*;
 import com.gec.myparking.dto.ParkingOrderDTO;
 import com.gec.myparking.service.*;
+import com.gec.myparking.util.Const;
 import com.gec.myparking.util.MyparkingUtil;
 import com.sun.xml.internal.bind.v2.TODO;
+import me.chanjar.weixin.common.bean.WxJsapiSignature;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +52,10 @@ public class PortalUserController {
 	private ParkingOrderService orderService;
 
 
+	@Autowired
+	private WxMpService wxMpService;
+
+
 	@RequestMapping("loginPage")
 	public String loginPage() {
 		return "portal/login";
@@ -59,6 +67,8 @@ public class PortalUserController {
 		List<Car> cars =carService.getCarsByUserId(hostHolder.getUser().getId());
 		model.addAttribute("cars",cars);
 		model.addAttribute("carUserId",hostHolder.getUser().getId());
+
+
 		return "portal/addCarPage";
 	}
 
@@ -70,8 +80,26 @@ public class PortalUserController {
 		return "portal/orderPage";
 	}
 
+	//需要关注公众号！！！！！！！！！
 	@RequestMapping("indexPage")
-	public String indexPage() {
+	public String indexPage(Model model)  {
+
+		try {
+			//二维码页面js调用
+			//调用js的页面
+			WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature("http://peterpoker.natapp1.cc/portal/user/indexPage");
+			long timestamp = jsapiSignature.getTimestamp();
+			String nonceStr = jsapiSignature.getNonceStr();
+			String signature = jsapiSignature.getSignature();
+			model.addAttribute("timestamp", String.valueOf(timestamp));
+			model.addAttribute("nonceStr", nonceStr);
+			model.addAttribute("signature", signature);
+
+
+
+		}catch (WxErrorException e) {
+			e.printStackTrace();
+		}
 		return "portal/index";
 	}
 
@@ -87,7 +115,7 @@ public class PortalUserController {
 	 * @return
 	 */
 	@RequestMapping("bookPortPage")
-	public String bookPortPage(Model model) {
+	public String bookPortPage(Model model)  {
 		//获取初始化svg图像
 		String initSVG = portService.showPortInfoSVG();
 
@@ -121,6 +149,26 @@ public class PortalUserController {
 		//查询是否已经绑定车位
 		List<ParkingPort> portList = portService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_BOOKING);
 		model.addAttribute("portList",portList);
+
+		//二维码页面js调用
+		//调用js的页面
+		WxJsapiSignature jsapiSignature = null;
+		try {
+			//LOGGER.error("accesstoken:"+wxMpService.getAccessToken());
+			String currentUrl = "http://peterpoker.natapp1.cc/portal/user/bookPortPage";
+			jsapiSignature = wxMpService.createJsapiSignature(currentUrl);
+			//LOGGER.error("jsticket:"+wxMpService.getJsapiTicket());
+			//LOGGER.error(jsapiSignature.toString());
+			long timestamp = jsapiSignature.getTimestamp();
+			String nonceStr = jsapiSignature.getNonceStr();
+			String signature = jsapiSignature.getSignature();
+			model.addAttribute("timestamp", String.valueOf(timestamp));
+			model.addAttribute("nonceStr", nonceStr);
+			model.addAttribute("signature", signature);
+		} catch (WxErrorException e) {
+			e.printStackTrace();
+		}
+
 
 		//转发视图
 		return "portal/bookPortPage";

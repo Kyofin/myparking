@@ -1,16 +1,19 @@
 package com.gec.myparking.service;
 
 import com.gec.myparking.dao.ParkingOrderMapper;
+import com.gec.myparking.domain.HostHolder;
 import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.domain.User;
 import com.gec.myparking.dto.ParkingOrderDTO;
+import com.gec.myparking.util.Const;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,6 +26,9 @@ public class ParkingOrderService {
 
     @Autowired
     private ParkingPortService portService;
+
+    @Autowired
+    private HostHolder hostHolder;
 
 
     public PageInfo<ParkingOrder> getOrders(Integer page, Integer limit) {
@@ -52,5 +58,24 @@ public class ParkingOrderService {
         }
 
         return orderDTOS;
+    }
+
+    public void insertOrder(ParkingOrder order){
+        parkingOrderMapper.insert(order);
+    }
+
+
+    /**
+     * 创建新订单对象
+     * @param portId
+     * @return
+     */
+    public ParkingOrder creatNewOrder(Integer portId ,Integer userId) {
+        ParkingOrder order = new ParkingOrder();
+        order.setUserId(userId);
+        order.setCarPortId(portId);
+        order.setBeginTime(new Date());
+        order.setStatus(Const.orderStatus.ORDER_STATUS_NOPAY);
+        return order;
     }
 }

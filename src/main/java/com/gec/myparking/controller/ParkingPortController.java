@@ -98,7 +98,7 @@ public class ParkingPortController {
 
     @RequestMapping(value = "/cancel",method = RequestMethod.POST)
     @ResponseBody
-    public  String cancelPort(@RequestParam("portId") Integer portId)
+    public  String cancelBookPort(@RequestParam("portId") Integer portId)
     {
         try {
             Map map =  parkingPortService.cancelPort(portId);
@@ -148,6 +148,7 @@ public class ParkingPortController {
                 return MyparkingUtil.getJsonString(1,map,"使用车位失败");
         }catch (Exception e)
         {
+            e.printStackTrace();
             LOGGER.error(e.getMessage());
             return MyparkingUtil.getJsonString(1,"发生异常，使用车位失败");
         }

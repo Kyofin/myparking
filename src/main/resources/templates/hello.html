@@ -1,65 +1,26 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-<head lang="en">
+<head>
+    <title>hello</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-    <title>Portal Login Page </title>
-    <#include "/portal/amazedHead.html">
-
-    <style>
-        .header {
-            text-align: center;
-        }
-        .header h1 {
-            font-size: 200%;
-            color: #333;
-            margin-top: 30px;
-        }
-        .header p {
-            font-size: 14px;
-        }
-    </style>
 </head>
 <body>
+<span >${name}</span>
 
-<#include "/portal/header.html">
-
-
-<div class="am-g">
-    <div class="am-u-lg-6 am-u-md-8 am-u-sm-centered ">
-
-        <a class="am-btn am-btn-danger am-btn-block  am-btn-xl" href="/portal/user/addCarPage">
-
-            绑定车辆
-        </a>
-<br>
-        <a class="am-btn am-btn-success am-btn-block  am-btn-xl" href="/portal/user/bookPortPage">
-            预订车位
-        </a>
-<br>
-
-        <a id="scanQRCode" class="scanQRCode am-btn am-btn-default am-btn-block  am-btn-xl">
-            反向寻车
-        </a>
-<br>
-        <a class="am-btn am-btn-warning am-btn-block  am-btn-xl" href="/portal/user/orderPage">
-            查询账单
-        </a>
-        <br>
-
-<br>
-
-    </div>
-</div>
-
-<input id="timestamp" type="hidden" value="${timestamp}" />
-<input id="noncestr" type="hidden" value="${nonceStr}" />
-<input id="signature" type="hidden" value="${signature}" />
-
-<#include "/portal/footer.html">
+<input id="id_securityCode_input"/>
+<button id="scanQRCode">扫码</button>
 
 
-</body>
+timestamp:<input id="timestamp" type="text" value="${timestamp}" />
+nonceStr:<input id="noncestr" type="text" value="${nonceStr}" />
+signature:<input id="signature" type="text" value="${signature}" />
 
+<br/>
+
+<!--<a href="http://peterpoker.natapp1.cc/auth">授权</a>-->
+
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script>
 <script type="text/javascript">
     $(function() {
@@ -76,8 +37,6 @@
             // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         });
 
-
-
         $("#scanQRCode").click(function() {
             wx.scanQRCode({
                 // 默认为0，扫描结果由微信处理，1则直接返回扫描结果
@@ -86,8 +45,7 @@
                 success : function(res) {
                     //扫码后获取结果参数赋值给Input
                     var url = res.resultStr;
-                    alert("反向寻车"+url);
-                    // $("#id_securityCode_input").val(url);
+                    $("#id_securityCode_input").val(url);
                     /*//商品条形码，取","后面的
                     if(url.indexOf(",")>=0){
                         var tempArray = url.split(',');
@@ -103,4 +61,5 @@
     });
 </script>
 
+</body>
 </html>
