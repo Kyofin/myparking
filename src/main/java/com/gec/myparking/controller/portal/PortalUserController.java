@@ -76,6 +76,7 @@ public class PortalUserController {
 	public String orderPage(Model model) {
 		//获取用户关联订单
 		List<ParkingOrderDTO> orders = orderService.getOrdersByUserId(hostHolder.getUser().getId());
+
 		model.addAttribute("orders",orders);
 		return "portal/orderPage";
 	}
@@ -87,7 +88,7 @@ public class PortalUserController {
 		try {
 			//二维码页面js调用
 			//调用js的页面
-			WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature("http://peterpoker.natapp1.cc/portal/user/indexPage");
+			WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature("http://abc.21java.xyz/portal/user/indexPage");
 			long timestamp = jsapiSignature.getTimestamp();
 			String nonceStr = jsapiSignature.getNonceStr();
 			String signature = jsapiSignature.getSignature();
@@ -155,7 +156,7 @@ public class PortalUserController {
 		WxJsapiSignature jsapiSignature = null;
 		try {
 			//LOGGER.error("accesstoken:"+wxMpService.getAccessToken());
-			String currentUrl = "http://peterpoker.natapp1.cc/portal/user/bookPortPage";
+			String currentUrl = "http://abc.21java.xyz/portal/user/bookPortPage";
 			jsapiSignature = wxMpService.createJsapiSignature(currentUrl);
 			//LOGGER.error("jsticket:"+wxMpService.getJsapiTicket());
 			//LOGGER.error(jsapiSignature.toString());
@@ -301,6 +302,8 @@ public class PortalUserController {
 			return MyparkingUtil.getJsonString(1, "发生异常，注册失败");
 		}
 	}
+
+
 
 
 	@RequestMapping(value = "/uploadImage", method = RequestMethod.POST)

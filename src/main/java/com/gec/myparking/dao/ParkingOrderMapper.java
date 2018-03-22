@@ -24,7 +24,7 @@ public interface ParkingOrderMapper {
 
     int updateByPrimaryKey(ParkingOrder record);
 
-    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME})
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"ORDER BY begin_time DESC "})
     List<ParkingOrder> selectAllOrders();
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId}"})

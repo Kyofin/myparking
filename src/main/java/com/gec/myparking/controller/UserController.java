@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * todo Bug:添加用户时不上传图片提交成功没数据
+ */
 @Controller
 @RequestMapping("/user")
 public class UserController {

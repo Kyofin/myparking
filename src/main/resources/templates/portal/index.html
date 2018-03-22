@@ -2,7 +2,7 @@
 <html>
 <head lang="en">
 
-    <title>Portal Login Page </title>
+    <title>主页</title>
     <#include "/portal/amazedHead.html">
 
     <style>
@@ -67,7 +67,7 @@
         var nonceStr = $("#noncestr").val();//随机串
         var signature = $("#signature").val();//签名
         wx.config({
-            debug : true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+            debug : false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
             appId : 'wx6f6480a39693fbb1', // 必填，公众号的唯一标识
             timestamp : timestamp, // 必填，生成签名的时间戳
             nonceStr : nonceStr, // 必填，生成签名的随机串
@@ -77,6 +77,10 @@
         });
 
 
+        //定义提示模态框
+        var infoModal = $('#info');
+        //定义loading模态框
+        var loadingModal = $('#my-modal-loading');
 
         $("#scanQRCode").click(function() {
             wx.scanQRCode({
@@ -86,16 +90,23 @@
                 success : function(res) {
                     //扫码后获取结果参数赋值给Input
                     var url = res.resultStr;
-                    alert("反向寻车"+url);
-                    // $("#id_securityCode_input").val(url);
-                    /*//商品条形码，取","后面的
-                    if(url.indexOf(",")>=0){
-                        var tempArray = url.split(',');
-                        var tempNum = tempArray[1];
-                        $("#id_securityCode_input").val(tempNum);
-                    }else{
-                        $("#id_securityCode_input").val(url);
-                    }*/
+                   $.post(url,function (result) {
+                       var responseObj = JSON.parse(result);
+                       //alert(responseObj.code===0);
+                       if(responseObj.code === 0){
+                           var pathUrl = "http://abc.21java.xyz/portal/user/getPath?beginPortName=" +responseObj.beginPortName+"&endPortName=" +responseObj.endPortName;
+                           alert(pathUrl);
+                           infoModal.find(".am-modal-bd").text(responseObj.msg + "，即将为你显示引导路径！");
+                           infoModal.modal('toggle');
+                           $("#info").find(".am-modal-btn").on("click", function () {
+                               loadingModal.modal("open")
+                               setTimeout( function () {
+                                   window.location.href = pathUrl ;
+
+                               },1000)
+                           })
+                       }
+                   })
                 }
             });
         });

@@ -12,6 +12,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -138,6 +139,7 @@ public class ParkingPortService {
 	}
 
 
+	@Transactional
 	public Map usePort(Integer portId) throws Exception {
 		Map<String, Object> map = new HashMap();
 		if (portId == null) {

@@ -27,7 +27,7 @@ public class WeChatHelloController {
 		model.addAttribute("name", "peter");
 
 		//二维码
-		WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature("http://peterpoker.natapp1.cc/wechatHello");
+		WxJsapiSignature jsapiSignature = wxMpService.createJsapiSignature("http://abc.21java.xyz/wechatHello");
 		long timestamp = jsapiSignature.getTimestamp();
 		String nonceStr = jsapiSignature.getNonceStr();
 		String signature = jsapiSignature.getSignature();
@@ -43,7 +43,7 @@ public class WeChatHelloController {
 
 	/**
 	 * 构造网页授权url（例如可用a标签）
-	 * http://peterpoker.natapp1.cc/auth
+	 * http://abc.21java.xyz/auth
 	 *
 	 *
 	 * @return
@@ -53,7 +53,7 @@ public class WeChatHelloController {
 	public String auth() throws Exception {
 
 		//设置用户点击授权后跳转的url
-		String url = "http://peterpoker.natapp1.cc/getUserInfo";
+		String url = "http://abc.21java.xyz/getUserInfo";
 		//构造发送到微信服务器的网页授权url
 		String s = wxMpService.oauth2buildAuthorizationUrl(url, WxConsts.OAuth2Scope.SNSAPI_USERINFO, null);
 		return "redirect:" + s;

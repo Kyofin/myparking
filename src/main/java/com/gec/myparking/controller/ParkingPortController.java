@@ -135,10 +135,40 @@ public class ParkingPortController {
     }
 
 
-    @RequestMapping(value = "/use/{portId}",method = RequestMethod.GET)
+    /**
+     * 扫二维码触发
+     * @param portId
+     * @return
+     */
+    @RequestMapping(value = "/use/{portId}")
     @ResponseBody
     public  String usePort(@PathVariable("portId") Integer portId)
     {
+        try {
+            //获取当前用户是否正在使用车位
+            List<ParkingPort> ports = parkingPortService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_USED);
+
+            //已经在使用车位
+            if (ports!=null){
+                //获取两个车位的信息
+                ParkingPort beginPort = parkingPortService.getPortById(portId);
+                ParkingPort endPort = ports.get(0);
+                String beginPortName = beginPort.getCarportName();
+                String endPortName = endPort.getCarportName();
+                Map<String,Object> map = new HashMap<>();
+                map.put("beginPortName",beginPortName);
+                map.put("endPortName",endPortName);
+                return MyparkingUtil.getJsonString(0,map,"反向寻车成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            LOGGER.error(e.getMessage());
+            return MyparkingUtil.getJsonString(1,"反向寻车失败");
+
+        }
+
+
+        //没有使用车位
         try {
             Map map =  parkingPortService.usePort(portId);
             if (map.isEmpty())
