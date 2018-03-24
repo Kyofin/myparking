@@ -6,7 +6,7 @@ import com.gec.myparking.dao.ParkingPortMapper;
 import com.gec.myparking.domain.HostHolder;
 import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +32,9 @@ public class ParkingPortService {
 
 	@Autowired
 	ParkingOrderService orderService;
+
+	@Autowired
+	WebSocket webSocket;
 
 
 	/**
@@ -163,6 +165,7 @@ public class ParkingPortService {
 			if (outPort.getParkingUserId() != hostHolder.getUser().getId())
 				map.put("error", "车位已经被他人预定");
 			else {
+
 				//更新车位
 				outPort.setStatus(MyparkingUtil.PORT_STATUS_USED);
 				outPort.setParkingUserId(hostHolder.getUser().getId());
@@ -172,6 +175,10 @@ public class ParkingPortService {
 				//持久化数据
 				parkingPortMapper.updateByPrimaryKeySelective(outPort);
 				orderService.insertOrder(order);
+
+				//成功使用车位/停放车辆 ，反馈后台
+				webSocket.sendMessage("车位："+outPort.getCarportName()+"已被使用");
+
 			}
 			return map;
 		}
@@ -250,5 +257,10 @@ public class ParkingPortService {
 		parkingPortMapper.updateByPrimaryKey(outPort);
 
 		return map;
+	}
+
+
+	public void updatePort(ParkingPort port) {
+		parkingPortMapper.updateByPrimaryKey(port);
 	}
 }

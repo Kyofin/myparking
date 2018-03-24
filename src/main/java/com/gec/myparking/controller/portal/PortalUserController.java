@@ -3,9 +3,8 @@ package com.gec.myparking.controller.portal;
 import com.gec.myparking.domain.*;
 import com.gec.myparking.dto.ParkingOrderDTO;
 import com.gec.myparking.service.*;
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
-import com.sun.xml.internal.bind.v2.TODO;
 import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -15,10 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
@@ -54,6 +50,9 @@ public class PortalUserController {
 
 	@Autowired
 	private WxMpService wxMpService;
+
+	@Autowired
+	private WebSocket webSocket;
 
 
 	@RequestMapping("loginPage")
@@ -294,12 +293,12 @@ public class PortalUserController {
 				cookie.setPath("/");  //全网有效
 				response.addCookie(cookie);
 
-				return MyparkingUtil.getJsonString(0, map, "注册成功");
+				return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, map, "注册成功");
 			}
-			return MyparkingUtil.getJsonString(1, map, "注册失败"); //注册失败，返回错误信息
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, map, "注册失败"); //注册失败，返回错误信息
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
-			return MyparkingUtil.getJsonString(1, "发生异常，注册失败");
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "发生异常，注册失败");
 		}
 	}
 
@@ -314,17 +313,33 @@ public class PortalUserController {
 			String fileUrl = qiuNiuService.saveImageToQiuNiu(file);
 			//String fileUrl = newsService.saveImage(file);
 			if (fileUrl == null) {
-				return MyparkingUtil.getJsonString(1, "上传图片失败");
+				return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "上传图片失败");
 			}
-			return MyparkingUtil.getJsonString(0, fileUrl);
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, fileUrl);
 		} catch (Exception e) {
 			LOGGER.error("上传图片异常");
-			return MyparkingUtil.getJsonString(1, "上传图片失败");
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "上传图片失败");
 		}
 	}
 
 
 
+	@RequestMapping("pay/{orderId}")
+	@ResponseBody
+	public String payOrder(@PathVariable Integer orderId){
+		try {
+			ParkingOrder order = orderService.getOrdersByOrderId(orderId);
+			if (order!=null) {
+				orderService.payForOrder(order);
+			}
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,  "支付成功");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			LOGGER.error(e.getMessage());
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "发生异常，支付失败");
+		}
+	}
 
 
 }

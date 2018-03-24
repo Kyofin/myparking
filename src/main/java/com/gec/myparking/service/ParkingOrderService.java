@@ -6,11 +6,13 @@ import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.domain.User;
 import com.gec.myparking.dto.ParkingOrderDTO;
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
+import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +77,47 @@ public class ParkingOrderService {
         order.setUserId(userId);
         order.setCarPortId(portId);
         order.setBeginTime(new Date());
-        order.setStatus(Const.orderStatus.ORDER_STATUS_NOPAY);
+        order.setStatus(Constant.orderStatus.ORDER_STATUS_NOPAY);
         return order;
+    }
+
+
+
+    public ParkingOrder getOrdersByOrderId(Integer orderId) {
+        if (orderId!=null){
+            ParkingOrder order = parkingOrderMapper.selectByPrimaryKey(orderId);
+            return order;
+        }
+        return null;
+    }
+
+
+    @Transactional
+    public void payForOrder(ParkingOrder order) {
+        if (order == null){
+            return;
+        }
+
+        //计算时长
+        Date beginDate = order.getBeginTime();
+        Date endDate = new Date();
+        long datePoorHour = MyparkingUtil.getDatePoor(endDate, beginDate);
+        order.setEndTime(new Date());
+        order.setDuration(datePoorHour);
+        //计算价格
+        order.setPrice(Double.valueOf(datePoorHour*10));
+
+        //更改订单状态（变为已支付）
+        order.setStatus(Constant.orderStatus.ORDER_STATUS_PAYED);
+
+        //更改车位状态（变为空）todo 定时十五分钟后触发
+        ParkingPort port = portService.getPortById(order.getCarPortId());
+        port.setStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+        port.setParkingUserId(null);
+
+        //持久化
+        parkingOrderMapper.updateByPrimaryKeySelective(order);
+        portService.updatePort(port);
+
     }
 }

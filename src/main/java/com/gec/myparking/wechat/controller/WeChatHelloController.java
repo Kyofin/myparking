@@ -60,7 +60,6 @@ public class WeChatHelloController {
 	}
 
 	@RequestMapping("getUserInfo")
-	@ResponseBody
 	public String getUserInfo(@RequestParam String code) throws WxErrorException {
 
 		//当用户同意授权后，会回调所设置的url并把authorization code传过来，

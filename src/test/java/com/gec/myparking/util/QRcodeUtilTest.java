@@ -12,7 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.IOException;
 import java.util.List;
 
-import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class QRcodeUtilTest {
@@ -25,7 +24,7 @@ public class QRcodeUtilTest {
 		List<ParkingPort> parkingPorts = portMapper.selectAllPorts();
 
 		for (ParkingPort parkingPort : parkingPorts) {
-			String url = Const.CONTEXT_URL+"/parkingport/use/"+parkingPort.getId();
+			String url = Constant.CONTEXT_URL+"/parkingport/use/"+parkingPort.getId();
 			QRcodeUtil.writeQRcodeToFile(url,parkingPort.getCarportName());
 		}
 

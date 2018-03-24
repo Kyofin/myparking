@@ -103,7 +103,7 @@
                         <div class="am-btn-toolbar">
                             <div class="am-btn-group am-btn-group-xs">
                                 <#if order.status == 0>
-                                <a href="#" class="am-btn am-btn-success am-btn-xs ">
+                                <a href="#" data-id=${order.id} class="pay am-btn am-btn-success am-btn-xs ">
                                     <span
                                             class="am-icon-info-circle" ></span> 支付
                                 </a>
@@ -133,7 +133,27 @@
 </body>
 <!--自定义脚本-->
 
-"<script>
+<script>
+
+    $(function () {
+        //定义提示模态框
+        var infoModal = $('#info');
+
+        $(".pay").on("click",function () {
+            var payId = $(this).attr("data-id");
+            alert(payId);
+            $.post("http://abc.21java.xyz/portal/user/pay/"+payId,function (result) {
+                var responseObj = JSON.parse(result);
+                //alert(responseObj.code===0);
+                infoModal.find(".am-modal-bd").text(responseObj.msg );
+                infoModal.modal('open');
+                infoModal.find(".am-modal-btn").on("click",function () {
+
+                    window.location.reload();
+                });
+            });
+        });
+    })
 
 
 

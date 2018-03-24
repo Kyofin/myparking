@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.gec.myparking.domain.Car;
 import com.gec.myparking.service.CarService;
 import com.gec.myparking.service.UserService;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -65,12 +66,12 @@ public class CarController {
                 dataList.add(dataMap);
             }
             map.put("data",dataList);
-            return MyparkingUtil.getJsonString(0,map,"获取车辆列表成功");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"获取车辆列表成功");
         }catch (Exception e)
         {
             e.printStackTrace();
            LOGGER.error(e.getMessage());
-           return MyparkingUtil.getJsonString(1,"发生异常，获取车辆列表失败");
+           return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，获取车辆列表失败");
         }
 
     }
@@ -83,13 +84,13 @@ public class CarController {
         try {
             Map map = carService.addCar(carNumber,carUserId);
             if (map.isEmpty())
-                return MyparkingUtil.getJsonString(0,"添加车辆成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"添加车辆成功");
             else
-                return MyparkingUtil.getJsonString(1,map,"添加车辆失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"添加车辆失败");
         }catch (Exception e)
         {
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，添加车辆失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，添加车辆失败");
         }
     }
 
@@ -100,11 +101,11 @@ public class CarController {
     {
         try {
             carService.deleteCar(id);
-            return MyparkingUtil.getJsonString(0,"删除车辆成功");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"删除车辆成功");
         }catch (Exception e)
         {
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，删除车辆失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，删除车辆失败");
         }
 
     }

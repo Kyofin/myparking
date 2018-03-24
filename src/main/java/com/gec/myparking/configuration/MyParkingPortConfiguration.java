@@ -20,7 +20,8 @@ public class MyParkingPortConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         //验证用户ticket拦截器，成功则保留登录用户
-        registry.addInterceptor(passportInterceptor);
+        registry.addInterceptor(passportInterceptor)
+                .excludePathPatterns("/portal/**");
         //根据是否登录拦截页面
         registry.addInterceptor(loginRequiredInterceptor)
                 .addPathPatterns("/")

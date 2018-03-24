@@ -25,8 +25,8 @@ layui.use(['form','layer','table','laytpl'],function(){
             {field: 'orderUser', title: '订单关联用户', minWidth:200, align:'center',templet:function(d){
                     return '<span class="layui-blue">'+d.orderUser+' </span>';
             }},
-            {field: 'price', title: '价格', minWidth:50, align:"center"},
-            {field: 'status', title: '状态', minWidth:50, align:"center",templet:function(d){
+            {field: 'price', title: '价格', minWidth:70, align:"center"},
+            {field: 'status', title: '状态', minWidth:70, align:"center",templet:function(d){
                     if (d.status==0)
                     {
                         return '<button class="layui-btn layui-btn-radius layui-btn-sm layui-btn-warm">未支付</button>'

@@ -128,6 +128,13 @@
 		</div>
 	</div>
 
+	<#--播放音乐-->
+	<audio id="notice" >
+		<source src="/mp3/song.mp3" type="audio/mpeg" />
+	</audio>
+
+
+
 	<!-- 移动导航 -->
 	<div class="site-tree-mobile"><i class="layui-icon">&#xe602;</i></div>
 	<div class="site-mobile-shade"></div>
@@ -135,5 +142,52 @@
 	<script type="text/javascript" src="layui/layui.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/cache.js"></script>
+
+	<script>
+		var layer ;
+        layui.use('layer', function(){
+            layer = layui.layer
+
+
+        });
+
+
+
+        var websocket = null;
+        if('WebSocket' in window) {
+            websocket = new WebSocket('ws://abc.21java.xyz/webSocket');
+        }else {
+            alert('该浏览器不支持websocket!');
+        }
+
+        websocket.onopen = function (event) {
+            console.log('建立连接');
+        }
+
+        websocket.onclose = function (event) {
+            console.log('连接关闭');
+        }
+
+        websocket.onmessage = function (event) {
+            console.log('收到消息:' + event.data)
+            //弹窗提醒, 播放音乐
+            layer.alert(event.data, {
+                skin: 'layui-layer-molv' //样式类名
+                ,closeBtn: 1
+                ,anim: 4 //动画类型
+            });
+
+           document.getElementById('notice').play();
+        }
+
+        websocket.onerror = function () {
+            alert('websocket通信发生错误！');
+        }
+
+        window.onbeforeunload = function () {
+            websocket.close();
+        }
+
+	</script>
 </body>
 </html>

@@ -210,13 +210,13 @@ public class SVGAdapter implements InitializingBean{
 		MapInfo info = new MapInfo(mapArray, mapArray[0].length, mapArray.length, beginNode, endNode);
 		//A*寻路开始
 		new AStar().start(info);
-		printMap(mapArray);
+		//printMap(mapArray);
 		//获取结果集合
 		List<Coord> resultCoordList = AStar.getResultCoordList();
 		//调整顺序
 		Collections.reverse(resultCoordList);
 		for (Coord coord : resultCoordList) {
-			System.out.println(coord.x + ":" + coord.y);
+			//System.out.println(coord.x + ":" + coord.y);
 		}
 		//获得svgpath
 		String path = getSVGPath(resultCoordList);

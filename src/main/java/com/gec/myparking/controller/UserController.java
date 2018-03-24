@@ -3,6 +3,7 @@ package com.gec.myparking.controller;
 import com.gec.myparking.domain.LoginTicket;
 import com.gec.myparking.domain.User;
 import com.gec.myparking.service.UserService;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -56,13 +57,13 @@ public class UserController {
         try {
             Map map = userService.addUser(userName,password,email,headUrl);
             if (map.isEmpty())
-                return MyparkingUtil.getJsonString(0,"添加用户成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"添加用户成功");
             else
-                return MyparkingUtil.getJsonString(1,map,"添加用户失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"添加用户失败");
         }catch (Exception e)
         {
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，添加用户失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，添加用户失败");
         }
     }
 
@@ -91,13 +92,13 @@ public class UserController {
                cookie.setPath("/");  //全网有效
                response.addCookie(cookie);
 
-               return MyparkingUtil.getJsonString(0,map,"登录成功");
+               return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"登录成功");
            }
-           return  MyparkingUtil.getJsonString(1,map,"登录失败"); //登录失败，返回错误信息
+           return  MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"登录失败"); //登录失败，返回错误信息
        }catch (Exception e)
        {
            LOGGER.error(e.getMessage());
-           return  MyparkingUtil.getJsonString(1,"发生异常,登录失败");
+           return  MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常,登录失败");
        }
     }
 
@@ -123,13 +124,13 @@ public class UserController {
 //              cookie.setPath("/");  //全网有效
 //              response.addCookie(cookie);
 //
-//              return MyparkingUtil.getJsonString(0,map,"注册成功");
+//              return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"注册成功");
 //          }
-//          return  MyparkingUtil.getJsonString(1,map,"注册失败"); //注册失败，返回错误信息
+//          return  MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"注册失败"); //注册失败，返回错误信息
 //      }catch (Exception e )
 //      {
 //          LOGGER.error(e.getMessage());
-//          return MyparkingUtil.getJsonString(1,"发生异常，注册失败");
+//          return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，注册失败");
 //      }
 //    }
 
@@ -139,11 +140,11 @@ public class UserController {
     {
         try {
             userService.doLoginOut(ticket);
-            return MyparkingUtil.getJsonString(0,"注销成功");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"注销成功");
         }catch (Exception e )
         {
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，注销失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，注销失败");
         }
 
     }
@@ -158,11 +159,11 @@ public class UserController {
              Map<String,Object> map = new HashMap<>();
              map.put("count",userPageInfo.getTotal());
              map.put("data",userPageInfo.getList());
-             return MyparkingUtil.getJsonString(0,map,"获取用户列表成功");
+             return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"获取用户列表成功");
         }catch (Exception e )
         {
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，获取用户列表失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，获取用户列表失败");
         }
     }
 
@@ -173,11 +174,11 @@ public class UserController {
     {
         try {
             userService.deleteUser(id);
-            return MyparkingUtil.getJsonString(0,"删除成功");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"删除成功");
         }catch (Exception e)
         {
             LOGGER.error(e.getMessage());
-            return  MyparkingUtil.getJsonString(1,"发生异常，删除失败");
+            return  MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，删除失败");
         }
     }
 

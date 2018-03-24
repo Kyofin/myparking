@@ -113,7 +113,7 @@
 </body>
 <!--自定义脚本-->
 
-"<script>
+<script>
     $(function () {
         //定义提示模态框
         var infoModal = $('#info');
@@ -234,15 +234,18 @@
                     //扫码后获取结果参数
                     var url = res.resultStr;
                     alert(url);
-                    //提交ajax请求预订绑定车位
+                    //提交ajax请求使用车位
                     $.post(url,function(result) {
                         var resultObject = JSON.parse(result);
                         if (resultObject.code == 0) {
                             //alert("成功:"+resultObject.msg);
-
                             infoModal.find(".am-modal-bd").text(resultObject.msg);
                             infoModal.modal('toggle');
-                            window.location.href="http://abc.21java.xyz/portal/user/orderPage/";//跳转页面.
+                            setTimeout(function () {
+                             window.location.href="http://abc.21java.xyz/portal/user/orderPage/";//跳转页面.
+
+                            },1500);
+
                         } else {
                             //弹出失败结果信息
                            // alert("失败:"+resultObject.error);

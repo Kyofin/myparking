@@ -95,7 +95,7 @@
                        //alert(responseObj.code===0);
                        if(responseObj.code === 0){
                            var pathUrl = "http://abc.21java.xyz/portal/user/getPath?beginPortName=" +responseObj.beginPortName+"&endPortName=" +responseObj.endPortName;
-                           alert(pathUrl);
+                           //alert(pathUrl);
                            infoModal.find(".am-modal-bd").text(responseObj.msg + "，即将为你显示引导路径！");
                            infoModal.modal('toggle');
                            $("#info").find(".am-modal-btn").on("click", function () {
@@ -105,6 +105,10 @@
 
                                },1000)
                            })
+                       }else {
+                           var errorMsg = responseObj.error;
+                           infoModal.find(".am-modal-bd").text(errorMsg );
+                           infoModal.modal('toggle');
                        }
                    })
                 }

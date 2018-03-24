@@ -1,8 +1,7 @@
 package com.gec.myparking.wechat.handler;
 
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.wechat.builder.TextBuilder;
-import com.gec.myparking.wechat.utils.JsonUtils;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.common.session.WxSessionManager;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -44,7 +43,7 @@ public class MsgHandler extends AbstractHandler {
     }
 
     //TODO 组装回复消息
-    String content = "请访问：" + Const.CONTEXT_URL+"/portal/user/loginPage";
+    String content = "请访问：" + Constant.CONTEXT_URL+"/portal/user/loginPage";
 
     return new TextBuilder().build(content, wxMessage, weixinService);
 

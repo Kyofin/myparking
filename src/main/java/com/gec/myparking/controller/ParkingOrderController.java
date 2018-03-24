@@ -5,16 +5,14 @@ import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.service.ParkingOrderService;
 import com.gec.myparking.service.ParkingPortService;
 import com.gec.myparking.service.UserService;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,13 +62,16 @@ public class ParkingOrderController {
 				dataList.add(dataMap);
 			}
 			map.put("data", dataList);
-			return MyparkingUtil.getJsonString(0, map, "获取订单列表成功");
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, map, "获取订单列表成功");
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error(e.getMessage());
-			return MyparkingUtil.getJsonString(1, "发生异常，获取订单列表失败");
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "发生异常，获取订单列表失败");
 		}
 	}
+
+
+
 
 }

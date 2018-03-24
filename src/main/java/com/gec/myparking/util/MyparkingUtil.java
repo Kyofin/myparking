@@ -25,6 +25,8 @@ public class MyparkingUtil {
 
 
 
+
+
     public static String getJsonString(int code )
     {
         JSONObject jsonObject= new JSONObject();
@@ -55,17 +57,17 @@ public class MyparkingUtil {
     /**
      * 获取两个时间的间隔
      * @param endDate
-     * @param nowDate
+     * @param beginDate
      * @return
      */
-    public static String getDatePoor(Date endDate, Date nowDate) {
+    public static long getDatePoor(Date endDate, Date beginDate) {
 
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;
         // long ns = 1000;
         // 获得两个时间的毫秒时间差异
-        long diff = endDate.getTime() - nowDate.getTime();
+        long diff = endDate.getTime() - beginDate.getTime();
         // 计算差多少天
         long day = diff / nd;
         // 计算差多少小时
@@ -74,7 +76,7 @@ public class MyparkingUtil {
         long min = diff % nd % nh / nm;
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
-        return day + "天" + hour + "小时" + min + "分钟";
+        return hour;
     }
 
     public static String MD5(String key) {

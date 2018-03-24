@@ -10,7 +10,7 @@ import com.gec.myparking.domain.Car;
 import com.gec.myparking.domain.ParkingOrder;
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.domain.User;
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.ZoneId;
@@ -193,7 +192,7 @@ public class Daotest {
 	@Test
 	public void testUpdateOrder() {
 		ParkingOrder order = orderMapper.selectByPrimaryKey(22);
-		order.setStatus(Const.orderStatus.ORDER_STATUS_PAYED);
+		order.setStatus(Constant.orderStatus.ORDER_STATUS_PAYED);
 		orderMapper.updateByPrimaryKeySelective(order);
 	}
 }

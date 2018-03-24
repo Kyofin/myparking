@@ -1,6 +1,6 @@
 package com.gec.myparking.wechat.controller;
 
-import com.gec.myparking.util.Const;
+import com.gec.myparking.util.Constant;
 import me.chanjar.weixin.common.bean.menu.WxMenu;
 import me.chanjar.weixin.common.bean.menu.WxMenuButton;
 import me.chanjar.weixin.common.exception.WxErrorException;
@@ -59,7 +59,7 @@ public class WxMenuController implements WxMpMenuService {
 
    WxMenuButton button2 = new WxMenuButton();
    button2.setType(MenuButtonType.VIEW);
-   button2.setUrl(Const.CONTEXT_URL);
+   button2.setUrl(Constant.CONTEXT_URL);
    button2.setName("企业管理");
 
 

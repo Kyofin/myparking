@@ -5,6 +5,8 @@ import com.gec.myparking.domain.HostHolder;
 import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.service.ParkingPortService;
 import com.gec.myparking.service.UserService;
+import com.gec.myparking.service.WebSocket;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;
@@ -30,6 +32,8 @@ public class ParkingPortController {
 
     @Autowired
     HostHolder hostHolder;
+
+
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParkingPortController.class);
 
@@ -67,13 +71,13 @@ public class ParkingPortController {
                 dataList.add(dataMap);
             }
             map.put("data",dataList);
-            return MyparkingUtil.getJsonString(0,map,"获取车位列表成功");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"获取车位列表成功");
 
         }catch (Exception e)
         {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，获取车位列表失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，获取车位列表失败");
         }
     }
 
@@ -85,13 +89,13 @@ public class ParkingPortController {
             Map map =  parkingPortService.bookPort(portId);
             if (map.isEmpty())
             {
-                return MyparkingUtil.getJsonString(0, "预定车位成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "预定车位成功");
             }else
-                return MyparkingUtil.getJsonString(1,map,"预定车位失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"预定车位失败");
         }catch (Exception e) {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，预定车位失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，预定车位失败");
         }
     }
 
@@ -104,13 +108,13 @@ public class ParkingPortController {
             Map map =  parkingPortService.cancelPort(portId);
             if (map.isEmpty())
             {
-                return MyparkingUtil.getJsonString(0, "取消预定车位成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "取消预定车位成功");
             }else
-                return MyparkingUtil.getJsonString(1,map,"取消预定车位失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"取消预定车位失败");
         }catch (Exception e) {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，取消预定车位失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，取消预定车位失败");
         }
     }
 
@@ -123,14 +127,14 @@ public class ParkingPortController {
             Map map =  parkingPortService.bookPortByPortName(portName);
             if (map.isEmpty())
             {
-                return MyparkingUtil.getJsonString(0, "预定车位成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "预定车位成功");
             }else
-                return MyparkingUtil.getJsonString(1,map,"预定车位失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"预定车位失败");
         }catch (Exception e)
         {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，预定车位失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，预定车位失败");
         }
     }
 
@@ -149,7 +153,7 @@ public class ParkingPortController {
             List<ParkingPort> ports = parkingPortService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_USED);
 
             //已经在使用车位
-            if (ports!=null){
+            if (ports.size()>0){
                 //获取两个车位的信息
                 ParkingPort beginPort = parkingPortService.getPortById(portId);
                 ParkingPort endPort = ports.get(0);
@@ -158,12 +162,12 @@ public class ParkingPortController {
                 Map<String,Object> map = new HashMap<>();
                 map.put("beginPortName",beginPortName);
                 map.put("endPortName",endPortName);
-                return MyparkingUtil.getJsonString(0,map,"反向寻车成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,map,"反向寻车成功");
             }
         }catch (Exception e){
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"反向寻车失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"反向寻车失败");
 
         }
 
@@ -173,14 +177,14 @@ public class ParkingPortController {
             Map map =  parkingPortService.usePort(portId);
             if (map.isEmpty())
             {
-                return MyparkingUtil.getJsonString(0, "使用车位成功");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "使用车位成功");
             }else
-                return MyparkingUtil.getJsonString(1,map,"使用车位失败");
+                return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"使用车位失败");
         }catch (Exception e)
         {
             e.printStackTrace();
             LOGGER.error(e.getMessage());
-            return MyparkingUtil.getJsonString(1,"发生异常，使用车位失败");
+            return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,"发生异常，使用车位失败");
         }
     }
 
