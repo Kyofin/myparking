@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Component
-public class LoginRequiredInterceptor implements HandlerInterceptor {
+public class AdminLoginRequiredInterceptor implements HandlerInterceptor {
     @Autowired
     HostHolder hostHolder;
 

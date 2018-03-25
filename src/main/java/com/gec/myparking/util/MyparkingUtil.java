@@ -65,7 +65,7 @@ public class MyparkingUtil {
         long nd = 1000 * 24 * 60 * 60;
         long nh = 1000 * 60 * 60;
         long nm = 1000 * 60;
-        // long ns = 1000;
+        long ns = 1000;
         // 获得两个时间的毫秒时间差异
         long diff = endDate.getTime() - beginDate.getTime();
         // 计算差多少天
@@ -75,8 +75,8 @@ public class MyparkingUtil {
         // 计算差多少分钟
         long min = diff % nd % nh / nm;
         // 计算差多少秒//输出结果
-        // long sec = diff % nd % nh % nm / ns;
-        return hour;
+         long sec = diff % nd % nh % nm / ns;
+        return sec;
     }
 
     public static String MD5(String key) {

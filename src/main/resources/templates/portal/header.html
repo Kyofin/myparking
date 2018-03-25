@@ -10,10 +10,16 @@
 
 <header class="am-topbar am-topbar-inverse admin-header">
     <div class="am-topbar-brand">
-        <strong> <a href="/portal/user/indexPage">欢迎使用智能停车库系统</a></strong>
+        <strong> <a href="/portal/user/indexPage">
+            欢迎<#if (user.nickName)??>${user.nickName}</#if>使用智能停车库系统</a></strong>
     </div>
-
+    <#if (user.nickName)??>
+    <button id="logoutBtn" class="am-topbar-btn  am-btn am-btn-sm am-btn-warning am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-sign-out"></span>注销</button>
     <button onclick="self.location=document.referrer;" class="am-topbar-btn  am-btn am-btn-sm am-btn-success am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-arrow-left"></span>返回</button>
+
+    <#else>
+
+</#if>
 
 
 </header>

@@ -19,7 +19,14 @@ public class User {
 
     private String headUrl;
 
-    public User(Integer id, String userName, String password, String salt, String email, Date createTime, Date updateTime, String headUrl) {
+    private String nickName ;
+
+
+    public User() {
+        super();
+    }
+
+    public User(Integer id, String userName, String password, String salt, String email, Date createTime, Date updateTime, String headUrl, String nickName) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -28,10 +35,7 @@ public class User {
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.headUrl = headUrl;
-    }
-
-    public User() {
-        super();
+        this.nickName = nickName;
     }
 
     public Integer getId() {
@@ -47,7 +51,7 @@ public class User {
     }
 
     public void setUserName(String userName) {
-        this.userName = userName == null ? null : userName.trim();
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -55,7 +59,7 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getSalt() {
@@ -63,7 +67,7 @@ public class User {
     }
 
     public void setSalt(String salt) {
-        this.salt = salt == null ? null : salt.trim();
+        this.salt = salt;
     }
 
     public String getEmail() {
@@ -71,7 +75,7 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email == null ? null : email.trim();
+        this.email = email;
     }
 
     public Date getCreateTime() {
@@ -95,6 +99,14 @@ public class User {
     }
 
     public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl == null ? null : headUrl.trim();
+        this.headUrl = headUrl;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 }

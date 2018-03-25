@@ -11,10 +11,11 @@
       <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
       <arg column="head_url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="nick_name" jdbcType="VARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, user_name, password, salt, email, create_time, update_time, head_url
+    id, user_name, password, salt, email, create_time, update_time, head_url,nick_name
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -29,10 +30,10 @@
   <insert id="insert" parameterType="com.gec.myparking.domain.User" >
     insert into user (id, user_name, password, 
       salt, email, create_time, 
-      update_time, head_url)
+      update_time, head_url,nick_name)
     values (#{id,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{salt,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{headUrl,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{headUrl,jdbcType=VARCHAR},#{nickName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.gec.myparking.domain.User" >
     insert into user
@@ -61,6 +62,9 @@
       <if test="headUrl != null" >
         head_url,
       </if>
+      <if test="nickName != null" >
+        nick_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -86,6 +90,9 @@
       </if>
       <if test="headUrl != null" >
         #{headUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="nickName != null" >
+        #{nickName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -113,6 +120,9 @@
       <if test="headUrl != null" >
         head_url = #{headUrl,jdbcType=VARCHAR},
       </if>
+      <if test="nickName != null" >
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -124,7 +134,8 @@
       email = #{email,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      head_url = #{headUrl,jdbcType=VARCHAR}
+      head_url = #{headUrl,jdbcType=VARCHAR},
+      nick_name = #{nickName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

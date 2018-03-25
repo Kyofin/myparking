@@ -20,6 +20,7 @@ layui.use(['form','layer','table','laytpl'],function(){
             {field: 'id', title: 'id', minWidth:100, align:"center"},
             {field: 'userName', title: '用户名', minWidth:100, align:"center"},
             {field: 'email', title: '用户邮箱', minWidth:200, align:'center',templet:function(d){
+                if (d.email == null) return "";
                 return '<a class="layui-blue" href="mailto:'+d.email+'">'+d.email+'</a>';
             }},
             {field: 'createTime', title: '创建时间', align:'center',templet:function (d) {

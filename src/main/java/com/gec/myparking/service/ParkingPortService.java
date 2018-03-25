@@ -177,7 +177,7 @@ public class ParkingPortService {
 				orderService.insertOrder(order);
 
 				//成功使用车位/停放车辆 ，反馈后台
-				webSocket.sendMessage("车位："+outPort.getCarportName()+"已被使用");
+				webSocket.sendMessage("车位："+outPort.getCarportName()+"已被用户："+hostHolder.getUser().getUserName()+"使用");
 
 			}
 			return map;

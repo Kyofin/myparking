@@ -4,13 +4,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * todo bug：重复发送消息会报错
+ */
 @Component
 @ServerEndpoint("/webSocket")
 public class WebSocket {
@@ -38,6 +38,8 @@ public class WebSocket {
 	@OnMessage
 	public void onMessage(String message) {
 		log.info("【websocket消息】收到客户端发来的消息:{}", message);
+		//心跳检测返回
+		sendMessage("HeartBeat");
 	}
 
 	public void sendMessage(String message) {
@@ -50,5 +52,16 @@ public class WebSocket {
 			}
 		}
 	}
+
+	/**
+	 * 发生错误时调用
+	 */
+	@OnError
+	public void onError(Session session, Throwable error) {
+		System.out.println("【websocket消息】发生错误:{}"+error.getMessage());
+		error.printStackTrace();
+	}
+
+
 
 }

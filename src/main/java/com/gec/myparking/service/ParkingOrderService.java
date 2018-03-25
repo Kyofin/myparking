@@ -105,7 +105,7 @@ public class ParkingOrderService {
         order.setEndTime(new Date());
         order.setDuration(datePoorHour);
         //计算价格
-        order.setPrice(Double.valueOf(datePoorHour*10));
+        order.setPrice(Double.valueOf(datePoorHour*1));
 
         //更改订单状态（变为已支付）
         order.setStatus(Constant.orderStatus.ORDER_STATUS_PAYED);

@@ -20,7 +20,9 @@ public class UserService {
     UserMapper userMapper;
 
     @Autowired
-    LoginTicketMapper loginTicketMapper;
+    LoginTicketService loginTicketService;
+
+
 
     /**
      * 登录服务
@@ -58,19 +60,9 @@ public class UserService {
 
 
         //登录校验通过，下发ticket
-        LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUserId(outUser.getId());
-        loginTicket.setTicket(UUID.randomUUID().toString().replace("-",""));
-        Date date = new Date();
-        date.setTime(date.getTime()+1000*3600*24*10);  //10天有效期
-        loginTicket.setExpired(date);   //设置有效期
-        loginTicket.setStatus(MyparkingUtil.LOGINTICKET_STATUS_USEFUL); //0为正常    1为失效
-        //将新创的ticket加入数据库
-        loginTicketMapper.insert(loginTicket);
-
-
+        Integer userId = outUser.getId();
+        LoginTicket loginTicket =loginTicketService.getLoginTicket(userId);
         System.out.println("登录成功下发ticket："+loginTicket.getTicket());
-
         map.put("ticket",loginTicket);
 
         return  map;
@@ -110,25 +102,19 @@ public class UserService {
         user.setEmail(email);
         userMapper.insert(user);
 
+
         //登录校验通过，下发ticket
-        LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUserId(userMapper.selectByUserName(username).getId());
-        loginTicket.setTicket(UUID.randomUUID().toString().replace("-",""));
-        Date date = new Date();
-        date.setTime(date.getTime()+1000*3600*24); //注册发放的，默认1天有效期
-        loginTicket.setExpired(date);   //设置有效期
-        loginTicket.setStatus(0); //0为正常    1为失效
-        //将新创的ticket加入数据库
-        loginTicketMapper.insert(loginTicket);
+        Integer userId = userMapper.selectByUserName(username).getId();
+        LoginTicket loginTicket = loginTicketService.getLoginTicket(userId);
         System.out.println("注册成功下发ticket："+loginTicket.getTicket());
 
         map.put("ticket",loginTicket);
         return map;
     }
 
-    public void doLoginOut(String ticket) {
-        loginTicketMapper.updateStatus(MyparkingUtil.LOGINTICKET_STATUS_NOTUSE,ticket);
-    }
+
+
+
 
     /**
      * 获得指定id用户
@@ -210,5 +196,25 @@ public class UserService {
         user.setEmail(email);
         userMapper.insert(user);
         return  map;
+    }
+
+
+
+
+    public User getUserByUserName(String userName) {
+        return userMapper.selectByUserName(userName);
+    }
+
+    public int addWxUser(String userName,String nickName, String headUrl) {
+        User user = new User();
+        user.setUserName(userName);
+        user.setNickName(nickName);
+        user.setHeadUrl(headUrl);
+        user.setCreateTime(new Date());
+        return userMapper.insertSelective(user);
+    }
+
+    public void updateUser(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }

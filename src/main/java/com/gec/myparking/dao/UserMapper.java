@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserMapper {
 
     String TABLE_NAME = "user";
-    String SELECT_FIELDS =" id , user_name , password, salt, email, create_time,update_time,head_url";
+    String SELECT_FIELDS =" id , user_name , password, salt, email, create_time,update_time,head_url,nick_name";
 
 
     /**

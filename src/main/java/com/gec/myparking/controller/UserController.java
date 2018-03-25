@@ -2,6 +2,7 @@ package com.gec.myparking.controller;
 
 import com.gec.myparking.domain.LoginTicket;
 import com.gec.myparking.domain.User;
+import com.gec.myparking.service.LoginTicketService;
 import com.gec.myparking.service.UserService;
 import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
@@ -28,6 +29,9 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    LoginTicketService loginTicketService;
 
     //访问用户页面
     @RequestMapping(value = "/userPage",method = RequestMethod.GET)
@@ -71,7 +75,6 @@ public class UserController {
     @ResponseBody
     public  String login(@RequestParam("username") String username,
                          @RequestParam("password") String password,
-                         @RequestParam(value = "remember",defaultValue = "0") int remember,
                          HttpServletResponse response)
     {
        try {
@@ -84,10 +87,6 @@ public class UserController {
                //将ticket保存到客户端以此做票据
                LoginTicket ticket = (LoginTicket) map.get("ticket");
                Cookie cookie = new Cookie("ticket", ticket.getTicket());
-               if (remember>0)
-               {
-                   cookie.setMaxAge(3600*24*10); //保存在客户端10天
-               }
                cookie.setMaxAge(3600*24*1); //默认保留一天（单位为s）
                cookie.setPath("/");  //全网有效
                response.addCookie(cookie);
@@ -139,7 +138,8 @@ public class UserController {
     public String logout(@CookieValue("ticket") String ticket)
     {
         try {
-            userService.doLoginOut(ticket);
+            loginTicketService.doLoginOut(ticket);
+            LOGGER.info("---------------------注销"+ticket+"成功---------------------");
             return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"注销成功");
         }catch (Exception e )
         {

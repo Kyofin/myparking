@@ -19,6 +19,7 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public String defaultExceptionHandler(HttpServletRequest req, Exception e) {
+		e.printStackTrace();
 		logger.error("---defaultExceptionHandler ---Host {} invokes url {} ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getMessage());
 		return e.getMessage();
 	}

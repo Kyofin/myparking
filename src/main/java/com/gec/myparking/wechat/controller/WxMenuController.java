@@ -54,7 +54,7 @@ public class WxMenuController implements WxMpMenuService {
     button1.setName("今日歌曲");
     button1.setKey("V1001_TODAY_MUSIC");*/
    button1.setName("用户使用");
-   button1.setUrl("http://abc.21java.xyz/portal/user/loginPage");
+   button1.setUrl("http://abc.21java.xyz/portal/user/indexPage");
    button1.setType(MenuButtonType.VIEW);
 
    WxMenuButton button2 = new WxMenuButton();
