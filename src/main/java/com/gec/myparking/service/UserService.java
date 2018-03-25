@@ -54,7 +54,7 @@ public class UserService {
 
         if (!MyparkingUtil.MD5(password+outUser.getSalt()).equals(outUser.getPassword()))
         {
-            map.put("error","用户密码错误");
+            map.put("error","用户或密码错误");
             return map ;  //直接中断验证，返回错误信息
         }
 
@@ -72,7 +72,7 @@ public class UserService {
     /**
      * 注册服务
      */
-    public Map<String,Object> register(String username, String password ,String email ,String headUrl) {
+    public Map<String,Object> register(String username, String password ,String email ,String headUrl,String nickName) {
         Map<String,Object> map = new HashMap<>();
         if (StringUtils.isEmpty(username))
         {
@@ -83,6 +83,22 @@ public class UserService {
         if (StringUtils.isEmpty(password))
         {
             map.put("error","注册密码不能为空");
+            return  map;
+        }
+        if (StringUtils.isEmpty(headUrl))
+        {
+            map.put("error","头像不能为空");
+            return  map;
+        }
+        if (StringUtils.isEmpty(email))
+        {
+            map.put("error","email不能为空");
+            return  map;
+        }
+
+        if (StringUtils.isEmpty(nickName))
+        {
+            map.put("error","昵称不能为空");
             return  map;
         }
 
@@ -100,6 +116,7 @@ public class UserService {
         user.setHeadUrl(headUrl);
         user.setCreateTime(new Date());
         user.setEmail(email);
+        user.setNickName(nickName);
         userMapper.insert(user);
 
 

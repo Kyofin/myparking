@@ -92,6 +92,10 @@ public class ParkingOrderService {
     }
 
 
+    /**
+     * todo 计费只取秒计算，为了测试数据比较直观
+     * @param order
+     */
     @Transactional
     public void payForOrder(ParkingOrder order) {
         if (order == null){

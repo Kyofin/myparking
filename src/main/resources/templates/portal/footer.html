@@ -51,8 +51,10 @@
 
 <script>
     $("#logoutBtn").on("click",function () {
-        $.post("/user/logout");
-        window.location.reload();
+        $.post("/user/logout",function () {
+        window.location.href="/portal/user/loginPage";
+
+        });
     })
 
 

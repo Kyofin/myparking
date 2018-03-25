@@ -49,6 +49,7 @@ public class UserController {
 
 
 
+    //todo 加入nickName
     @RequestMapping(value = "/addUser" ,method = RequestMethod.POST)
     @ResponseBody
     public  String addUser(@RequestParam String userName,

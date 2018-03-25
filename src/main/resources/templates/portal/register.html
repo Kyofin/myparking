@@ -67,19 +67,20 @@
           <div class="am-panel am-panel-default">
             <div class="am-panel-bd">
               <div class="am-g">
-                <div class="am-u-md-4">
-                  <img class="am-img-circle am-img-thumbnail" src="http://s.amazeui.org/media/i/demos/bw-2014-06-19.jpg?imageView/1/w/200/h/200/q/80" alt=""/>
+                <div id="headImage" class="am-u-md-4">
                 </div>
                 <div class="am-u-md-8">
                   <p>你可以使用本地上传头像。 </p>
-                  <form class="am-form">
-                    <div class="am-form-group">
-                      <input type="file" id="user-pic">
-                      <p class="am-form-help">请选择要上传的文件...</p>
-                      <button type="button" class="am-btn am-btn-primary am-btn-xs">保存</button>
+                  <form id="fileForm" action="" class="am-form">
+                    <div class="am-form-group am-form-file" id="my-upload">
+                      <input type="hidden" id="user-headUrl" name="headUlr" />
+                      <input type="file" name="file" id="doc-form-file">
+                      <button class="am-btn am-btn-danger am-btn-sm">
+                      <i class="am-icon-cloud-upload">上传</i>
+                      </button>
                     </div>
+                    <div id="file-list"></div>
                   </form>
-
 
 
                 </div>
@@ -111,17 +112,25 @@
         <div class="am-u-sm-12 am-u-md-8 am-u-md-pull-4">
           <form class="am-form am-form-horizontal">
             <div class="am-form-group">
-              <label for="user-name" class="am-u-sm-3 am-form-label">姓名 / Name</label>
+              <label for="user-name" class="am-u-sm-3 am-form-label">账号 / UserName</label>
               <div class="am-u-sm-9">
-                <input type="text" id="user-name" placeholder="姓名 / Name">
-                <small>输入你的名字，让我们记住你。</small>
+                <input type="text" id="user-name" name="username" placeholder="账号 / UserName">
+                <small>输入你的账号名，让我们记住你。</small>
+              </div>
+            </div>
+
+            <div class="am-form-group">
+              <label for="user-nick-name" class="am-u-sm-3 am-form-label">昵称 / NickName</label>
+              <div class="am-u-sm-9">
+                <input type="text" id="user-nick-name" name="nickname" placeholder="昵称 / NickName">
+                <small>输入你的昵称</small>
               </div>
             </div>
 
             <div class="am-form-group">
               <label for="user-password" class="am-u-sm-3 am-form-label">密码 / Password</label>
               <div class="am-u-sm-9">
-                <input type="password" id="user-password" placeholder="密码 / Password">
+                <input type="password" name="password" id="user-password" placeholder="密码 / Password">
                 <small>输入你的密码。</small>
               </div>
             </div>
@@ -129,7 +138,7 @@
             <div class="am-form-group">
               <label for="user-email" class="am-u-sm-3 am-form-label">电子邮件 / Email</label>
               <div class="am-u-sm-9">
-                <input type="email" id="user-email" placeholder="输入你的电子邮件 / Email">
+                <input type="email" name="email" id="user-email" placeholder="输入你的电子邮件 / Email">
                 <small>邮箱可接收停车库系统发出的通知</small>
               </div>
             </div>
@@ -138,7 +147,7 @@
 
             <div class="am-form-group">
               <div class="am-u-sm-9 am-u-sm-push-3">
-                <button type="button" class="am-btn am-btn-primary">保存修改</button>
+                <button type="button" id="submitBtn" class="am-btn am-btn-primary">注册</button>
               </div>
             </div>
           </form>
@@ -156,12 +165,66 @@
 
 <!--<a href="#" class="am-icon-btn am-icon-th-list am-show-sm-only admin-menu" data-am-offcanvas="{target: '#admin-offcanvas'}"></a>-->
 
-<script>
-//todo 注册的js未完成 ，上传文件的js未完成
 
-</script>
 
 
 <script src="/assets/js/app.js"></script>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/jquery.form.js"></script>
+
+
+<!--todo 注册的js未完成 ，上传文件的js未完成-->
+<script>
+    $(function() {
+        $('#doc-form-file').on('change', function() {
+            var fileNames = '';
+            $.each(this.files, function() {
+                fileNames += '<span class="am-badge">' + this.name + '</span> ';
+            });
+            $('#file-list').html(fileNames);
+
+            subimtFile();
+
+        });
+
+        $("#submitBtn").on("click",function () {
+            $.post("/portal/user/register",{
+                username:$("#user-name").val(),
+                password:$("#user-password").val(),
+                nickname:$("#user-nick-name").val(),
+                headUrl:$("#user-headUrl").val(),
+                email:$("#user-email").val()
+
+            },function (res) {
+                var obj = JSON.parse(res);
+                if(obj.code == 0){
+                    alert("注册成功");
+                    window.location.href="/portal/user/indexPage";
+                }else {
+                    alert(obj.error);
+                }
+
+            })
+        })
+
+        function subimtFile() {
+            var form = $("#fileForm");
+            var options = {
+                url:'/portal/user/uploadImage', //上传文件的路径
+                type:'post',
+                success:function(data){
+                    var obj = JSON.parse(data);
+                    console.log(obj.msg);
+                    //....       //异步上传成功之后的操作
+                    $("#user-headUrl").val(obj.msg);
+                    $("#headImage").html('<img class="am-img-circle am-img-thumbnail" src="'+$("#user-headUrl").val()+'" alt=""/>')
+                }
+            };
+            form.ajaxSubmit(options);
+        }
+
+    });
+</script>
+
 </body>
 </html>

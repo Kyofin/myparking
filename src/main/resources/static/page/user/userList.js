@@ -19,6 +19,7 @@ layui.use(['form','layer','table','laytpl'],function(){
             {type: "checkbox", fixed:"left", width:50},
             {field: 'id', title: 'id', minWidth:100, align:"center"},
             {field: 'userName', title: '用户名', minWidth:100, align:"center"},
+            {field: 'nickName', title: '昵称', minWidth:100, align:"center"},
             {field: 'email', title: '用户邮箱', minWidth:200, align:'center',templet:function(d){
                 if (d.email == null) return "";
                 return '<a class="layui-blue" href="mailto:'+d.email+'">'+d.email+'</a>';

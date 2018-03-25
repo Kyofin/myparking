@@ -27,6 +27,6 @@ public interface ParkingOrderMapper {
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"ORDER BY begin_time DESC "})
     List<ParkingOrder> selectAllOrders();
 
-    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId}"})
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId} ORDER BY begin_time DESC"})
     List<ParkingOrder>  selectAllOrdersByUserId(Integer userId);
 }

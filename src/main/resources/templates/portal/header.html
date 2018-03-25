@@ -11,11 +11,11 @@
 <header class="am-topbar am-topbar-inverse admin-header">
     <div class="am-topbar-brand">
         <strong> <a href="/portal/user/indexPage">
-            欢迎<#if (user.nickName)??>${user.nickName}</#if>使用智能停车库系统</a></strong>
+            <#if (user)??> <img class="am-circle " src="${user.headUrl}" width="45" height="45"/>&nbsp;${user.nickName!}<#else>欢迎使用智能停车库系统</#if></a></strong>
     </div>
     <#if (user.nickName)??>
-    <button id="logoutBtn" class="am-topbar-btn  am-btn am-btn-sm am-btn-warning am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-sign-out"></span>注销</button>
-    <button onclick="self.location=document.referrer;" class="am-topbar-btn  am-btn am-btn-sm am-btn-success am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-arrow-left"></span>返回</button>
+    <button id="logoutBtn" class="am-topbar-btn  am-btn am-btn-xs am-btn-warning am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-sign-out"></span>注销</button>
+    <button onclick="self.location=document.referrer;" class="am-topbar-btn  am-btn am-btn-xs am-btn-success am-topbar-right " style="float:right;margin-right: 5px " ><span class="am-icon-arrow-left"></span>返回</button>
 
     <#else>
 

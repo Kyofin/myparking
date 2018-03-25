@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Component
-public class MyParkingPortConfiguration extends WebMvcConfigurerAdapter {
+public class MyParkingConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     PassportInterceptor passportInterceptor;
     @Autowired
@@ -37,7 +37,10 @@ public class MyParkingPortConfiguration extends WebMvcConfigurerAdapter {
                 .addPathPatterns("/portal/user/**")
                 .excludePathPatterns("/portal/user/loginPage")
                 .excludePathPatterns("/portal/user/auth")
-                .excludePathPatterns("/portal/user/getUserInfo");
+                .excludePathPatterns("/portal/user/getUserInfo")
+                .excludePathPatterns("/portal/user/uploadImage")
+                .excludePathPatterns("/portal/user/register")
+                .excludePathPatterns("/portal/user/registerPage");
 
 
 

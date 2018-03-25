@@ -9,7 +9,7 @@ import javax.websocket.server.ServerEndpoint;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * todo bug：重复发送消息会报错
+ *
  */
 @Component
 @ServerEndpoint("/webSocket")

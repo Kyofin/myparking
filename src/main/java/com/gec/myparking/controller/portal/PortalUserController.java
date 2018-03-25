@@ -278,13 +278,14 @@ public class PortalUserController {
 	@ResponseBody
 	public String reg(@RequestParam("username") String username,
 					  @RequestParam("password") String password,
+					  @RequestParam("nickname") String nickName,
 					  @RequestParam("email") String email,
 					  @RequestParam("headUrl") String headUrl,
 					  HttpServletResponse response) {
 		try {
 			Map<String, Object> map = new HashMap<>();
 
-			map = userService.register(username, password, email, headUrl);
+			map = userService.register(username, password, email, headUrl,nickName);
 
 			if (map.containsKey("ticket")) {
 				//将ticket保存到客户端以此做票据
