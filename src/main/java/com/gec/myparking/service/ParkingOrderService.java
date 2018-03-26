@@ -124,4 +124,9 @@ public class ParkingOrderService {
         portService.updatePort(port);
 
     }
+
+	public List<ParkingOrder> getOrdersByUserIdAndStatus(Integer id, Integer orderStatus) {
+        return parkingOrderMapper.selectAllOrdersByUserIdAndStatus(id,orderStatus);
+
+	}
 }

@@ -17,6 +17,21 @@
             font-size: 14px;
         }
 
+        path {
+            stroke-dasharray: 320;
+            stroke-dashoffset: 0;
+            animation: dash 10s linear 0s infinite;
+        }
+
+        @keyframes dash {
+            from {
+                stroke-dashoffset: 320;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
+
 
         ${emptyCss}
 

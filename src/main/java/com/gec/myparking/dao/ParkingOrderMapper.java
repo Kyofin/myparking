@@ -2,6 +2,7 @@ package com.gec.myparking.dao;
 
 import com.gec.myparking.domain.ParkingOrder;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -29,4 +30,7 @@ public interface ParkingOrderMapper {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId} ORDER BY begin_time DESC"})
     List<ParkingOrder>  selectAllOrdersByUserId(Integer userId);
+
+    @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId} AND status = #{orderStatus} ORDER BY begin_time DESC"})
+    List<ParkingOrder> selectAllOrdersByUserIdAndStatus(@Param("userId") Integer userId,@Param("orderStatus") Integer orderStatus);
 }

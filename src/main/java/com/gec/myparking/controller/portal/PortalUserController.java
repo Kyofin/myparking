@@ -63,9 +63,9 @@ public class PortalUserController {
 	@RequestMapping("addCarPage")
 	public String addCarPage(Model model) {
 		//获取绑定车辆
-		List<Car> cars =carService.getCarsByUserId(hostHolder.getUser().getId());
-		model.addAttribute("cars",cars);
-		model.addAttribute("carUserId",hostHolder.getUser().getId());
+		List<Car> cars = carService.getCarsByUserId(hostHolder.getUser().getId());
+		model.addAttribute("cars", cars);
+		model.addAttribute("carUserId", hostHolder.getUser().getId());
 
 
 		return "portal/addCarPage";
@@ -76,13 +76,13 @@ public class PortalUserController {
 		//获取用户关联订单
 		List<ParkingOrderDTO> orders = orderService.getOrdersByUserId(hostHolder.getUser().getId());
 
-		model.addAttribute("orders",orders);
+		model.addAttribute("orders", orders);
 		return "portal/orderPage";
 	}
 
 	//需要关注公众号！！！！！！！！！
 	@RequestMapping("indexPage")
-	public String indexPage(Model model)  {
+	public String indexPage(Model model) {
 
 		try {
 			//二维码页面js调用
@@ -96,8 +96,7 @@ public class PortalUserController {
 			model.addAttribute("signature", signature);
 
 
-
-		}catch (WxErrorException e) {
+		} catch (WxErrorException e) {
 			e.printStackTrace();
 		}
 		return "portal/index";
@@ -111,44 +110,50 @@ public class PortalUserController {
 	/**
 	 * 预订车位的页面（显示各种车位状态，不同状态车位触发事件不一样。）
 	 * 已修复bug：取消原本车位后确认其他车位，显示的路线是之前取消的车位的引导路径
+	 *
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping("bookPortPage")
-	public String bookPortPage(Model model)  {
-		//获取初始化svg图像
-		String initSVG = portService.showPortInfoSVG();
-
-		//将svg图的结果放入
-		model.addAttribute("svg", initSVG);
-
-		//判断车位状态添加CSS
-		String[] usedPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_USED);
-		String[] emptyPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
-		String[] bookingPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
-
-		//emptyCssSB
-		StringBuilder emptyCssSB = new StringBuilder();
-		String emptyCssResult = getCssResult(emptyPortNameArray, emptyCssSB, "#00cc00");
-		model.addAttribute("emptyCss", emptyCssResult);
-
-		//usedCssSB
-		StringBuilder usedCssSB = new StringBuilder();
-		String usedCssResult = getCssResult(usedPortNameArray, usedCssSB, "#585858");
-		model.addAttribute("usedCssSB", usedCssResult);
-
-		//bookingCssSB
-		StringBuilder bookingCssSB = new StringBuilder();
-		String bookingCssResult = getCssResult(bookingPortNameArray, bookingCssSB, "#FAFA01");
-		model.addAttribute("bookingCssSB", bookingCssResult);
-
-		//增加js事件
-		String jsResult = getJsResult(usedPortNameArray,bookingPortNameArray,emptyPortNameArray);
-		model.addAttribute("jsResult",jsResult);
+	public String bookPortPage(Model model) {
 
 		//查询是否已经绑定车位
 		List<ParkingPort> portList = portService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_BOOKING);
-		model.addAttribute("portList",portList);
+		model.addAttribute("portList", portList);
+
+		//没有预定车位即可初始化图像
+		if (portList.size() == 0) {
+			//获取初始化svg图像
+			String initSVG = portService.showPortInfoSVG();
+
+			//将svg图的结果放入
+			model.addAttribute("svg", initSVG);
+
+			//判断车位状态添加CSS
+			String[] usedPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_USED);
+			String[] emptyPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_EMPTY);
+			String[] bookingPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_BOOKING);
+
+			//emptyCssSB
+			StringBuilder emptyCssSB = new StringBuilder();
+			String emptyCssResult = getCssResult(emptyPortNameArray, emptyCssSB, "#00cc00");
+			model.addAttribute("emptyCss", emptyCssResult);
+
+			//usedCssSB
+			StringBuilder usedCssSB = new StringBuilder();
+			String usedCssResult = getCssResult(usedPortNameArray, usedCssSB, "#585858");
+			model.addAttribute("usedCssSB", usedCssResult);
+
+			//bookingCssSB
+			StringBuilder bookingCssSB = new StringBuilder();
+			String bookingCssResult = getCssResult(bookingPortNameArray, bookingCssSB, "#FAFA01");
+			model.addAttribute("bookingCssSB", bookingCssResult);
+
+			//增加js事件
+			String jsResult = getJsResult(usedPortNameArray, bookingPortNameArray, emptyPortNameArray);
+			model.addAttribute("jsResult", jsResult);
+		}
+
 
 		//二维码页面js调用
 		//调用js的页面
@@ -169,6 +174,10 @@ public class PortalUserController {
 			e.printStackTrace();
 		}
 
+		//查询是否有未完成订单
+		List<ParkingOrder> orderList =  orderService.getOrdersByUserIdAndStatus(hostHolder.getUser().getId(),Constant.orderStatus.ORDER_STATUS_NOPAY);
+		model.addAttribute("orderList",orderList);
+
 
 		//转发视图
 		return "portal/bookPortPage";
@@ -184,7 +193,7 @@ public class PortalUserController {
 	 * @return
 	 */
 	@RequestMapping("getPath")
-	public String getPath(@RequestParam(value = "beginPortName",required = false) String beginPortName,
+	public String getPath(@RequestParam(value = "beginPortName", required = false) String beginPortName,
 						  @RequestParam("endPortName") String endPortName,
 						  Model model) {
 
@@ -193,7 +202,7 @@ public class PortalUserController {
 
 		System.out.println(path);
 
-		model.addAttribute("path",path);
+		model.addAttribute("path", path);
 
 		//判断车位状态添加CSS
 		String[] usedPortNameArray = portService.getPortNameArrayByStatus(MyparkingUtil.PORT_STATUS_USED);
@@ -221,34 +230,34 @@ public class PortalUserController {
 	}
 
 
-	private String getJsResult (String[] usedPortNameArray,String[] bookedPortNameArray,String[] emptyPortNameArray){
+	private String getJsResult(String[] usedPortNameArray, String[] bookedPortNameArray, String[] emptyPortNameArray) {
 		for (int i = 0; i < usedPortNameArray.length; i++) {
-			usedPortNameArray[i] = "#"+usedPortNameArray[i];
+			usedPortNameArray[i] = "#" + usedPortNameArray[i];
 		}
 		for (int i = 0; i < bookedPortNameArray.length; i++) {
-			bookedPortNameArray[i] = "#"+bookedPortNameArray[i];
+			bookedPortNameArray[i] = "#" + bookedPortNameArray[i];
 		}
 		for (int i = 0; i < emptyPortNameArray.length; i++) {
-			emptyPortNameArray[i] = "#"+emptyPortNameArray[i];
+			emptyPortNameArray[i] = "#" + emptyPortNameArray[i];
 		}
 
 
 		String string =
 				"        //绑定被预定车位的模态框事件\n" +
-				"        $('"+ StringUtils.join(Arrays.asList(bookedPortNameArray))+"').on('click', function (e) {\n" +
-				"            //更改模态框中提示信息\n" +
-				"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被预定\");\n" +
-				"            infoModal.modal('toggle');\n" +
-				"        });\n" +
-				"        //绑定被使用车位的模态框事件\n" +
-				"        $('"+ StringUtils.join(Arrays.asList(usedPortNameArray))+"').on('click', function (e) {\n" +
-				"            //更改模态框中提示信息\n" +
-				"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被使用，请选择其他车位\");\n" +
-				"            infoModal.modal('toggle');\n" +
-				"        });\n" +
-				"\n" +
-				"        //绑定可使用车位的模态框事件\n" +
-				"        $('"+ StringUtils.join(Arrays.asList(emptyPortNameArray))+"').on('click', confirmFun);";
+						"        $('" + StringUtils.join(Arrays.asList(bookedPortNameArray)) + "').on('click', function (e) {\n" +
+						"            //更改模态框中提示信息\n" +
+						"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被预定\");\n" +
+						"            infoModal.modal('toggle');\n" +
+						"        });\n" +
+						"        //绑定被使用车位的模态框事件\n" +
+						"        $('" + StringUtils.join(Arrays.asList(usedPortNameArray)) + "').on('click', function (e) {\n" +
+						"            //更改模态框中提示信息\n" +
+						"            $(\"#info\").find(\".am-modal-bd\").text(\"该车位已经被使用，请选择其他车位\");\n" +
+						"            infoModal.modal('toggle');\n" +
+						"        });\n" +
+						"\n" +
+						"        //绑定可使用车位的模态框事件\n" +
+						"        $('" + StringUtils.join(Arrays.asList(emptyPortNameArray)) + "').on('click', confirmFun);";
 
 		return string;
 	}
@@ -285,7 +294,7 @@ public class PortalUserController {
 		try {
 			Map<String, Object> map = new HashMap<>();
 
-			map = userService.register(username, password, email, headUrl,nickName);
+			map = userService.register(username, password, email, headUrl, nickName);
 
 			if (map.containsKey("ticket")) {
 				//将ticket保存到客户端以此做票据
@@ -302,8 +311,6 @@ public class PortalUserController {
 			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL, "发生异常，注册失败");
 		}
 	}
-
-
 
 
 	@RequestMapping(value = "/uploadImage", method = RequestMethod.POST)
@@ -324,16 +331,15 @@ public class PortalUserController {
 	}
 
 
-
 	@RequestMapping("pay/{orderId}")
 	@ResponseBody
-	public String payOrder(@PathVariable Integer orderId){
+	public String payOrder(@PathVariable Integer orderId) {
 		try {
 			ParkingOrder order = orderService.getOrdersByOrderId(orderId);
-			if (order!=null) {
+			if (order != null) {
 				orderService.payForOrder(order);
 			}
-			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,  "支付成功");
+			return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "支付成功");
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -18,9 +18,10 @@
             font-size: 14px;
         }
 
-        ${emptyCss}
-        ${usedCssSB}
-        ${bookingCssSB}
+
+        ${emptyCss!}
+        ${usedCssSB!}
+        ${bookingCssSB!}
 
     </style>
 </head>
@@ -35,10 +36,16 @@
 </ol>
 
 <div class="am-g">
+   <#if (orderList?size>0) >
+    <blockquote>
+        <p>你有未完成订单，请完成后再进行预定。</p>
+        <small>——系统提示</small>
+    </blockquote>
+
+    <#else>
 
 
-    <#if (portList?size>0) >
-
+    <#if portList?? && (portList?size > 0) >
     <!--表格-->
     <div class="am-cf am-padding am-padding-bottom-0">
         <div class="am-fl am-cf"><strong class="am-text-primary am-text-lg">已预约车位</strong> / <small>Table</small></div>
@@ -65,20 +72,20 @@
                             <div class="am-btn-group am-btn-group-xs">
                                 <a href="/portal/user/getPath?endPortName=${port.carportName}" class="am-btn am-btn-success am-btn-xs ">
                                     <span
-                                            class="am-icon-info-circle" ></span> 获取指引路线
+                                            class="am-icon-search" ></span> 获取指引路线
                                 </a>
                             </div>
                             <div class="am-btn-group am-btn-group-xs">
                                 <a id="scanQRCode" href="#" class="am-btn am-btn-primary am-btn-xs ">
                                     <span
-                                            class="am-icon-info-circle" ></span> 停放车辆
+                                            class="am-icon-taxi" ></span> 停放车辆
                                 </a>
                             </div>
                             <div class="am-btn-group am-btn-group-xs">
                                 <a class="am-btn am-btn-danger am-btn-xs cancelBtn">
                                     <input type="hidden" value="${port.id}"/>
                                     <span
-                                            class="am-icon-info-circle" ></span> 取消预定
+                                            class="am-icon-remove" ></span> 取消预定
                                 </a>
                             </div>
                         </div>
@@ -96,6 +103,8 @@
 <#else>
     <!--svg初始化图像-->
     ${svg}
+</#if>
+
 </#if>
 
 </div>
@@ -121,7 +130,7 @@
         var loadingModal = $('#my-modal-loading');
 
         <!--后端返回的js-->
-        ${jsResult}
+        ${jsResult!}
 
 
         function confirmFun() {
@@ -242,7 +251,7 @@
                             infoModal.find(".am-modal-bd").text(resultObject.msg);
                             infoModal.modal('toggle');
                             setTimeout(function () {
-                             window.location.href="http://abc.21java.xyz/portal/user/orderPage/";//跳转页面.
+                             window.location.href="http://abc.21java.xyz/portal/user/indexPage/";//跳转页面.
 
                             },1500);
 
