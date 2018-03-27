@@ -5,6 +5,7 @@ import com.gec.myparking.dao.UserMapper;
 import com.gec.myparking.domain.Car;
 import com.gec.myparking.domain.LoginTicket;
 import com.gec.myparking.domain.User;
+import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -117,6 +118,7 @@ public class UserService {
         user.setCreateTime(new Date());
         user.setEmail(email);
         user.setNickName(nickName);
+        user.setIsDeleted(Constant.IS_DELETED_FALSE);
         userMapper.insert(user);
 
 
@@ -167,17 +169,27 @@ public class UserService {
     }
 
     public void deleteUser(Integer id) {
-        if (id !=null && userMapper.selectByPrimaryKey(id)!=null)
-            userMapper.deleteByPrimaryKey(id);
+        if (id !=null && userMapper.selectByPrimaryKey(id)!=null){
+            User user = new User();
+            user.setId(id);
+            user.setUpdateTime(new Date());
+            user.setIsDeleted(Constant.IS_DELETED_TRUE);
+            userMapper.updateByPrimaryKeySelective(user);
+        }
         else
             throw  new NullPointerException();
     }
 
-    public Map addUser(String userName, String password, String email ,String headUrl) {
+    public Map addUser(String userName, String password, String email ,String headUrl ,String nickName) {
         Map<String ,Object> map = new HashMap<>();
         if (StringUtils.isEmpty(userName))
         {
             map.put("error","用户名不能为空");
+            return map;
+        }
+        if (StringUtils.isEmpty(nickName))
+        {
+            map.put("error","昵称不能为空");
             return map;
         }
 
@@ -211,6 +223,8 @@ public class UserService {
         user.setCreateTime(new Date());
         user.setHeadUrl(headUrl);
         user.setEmail(email);
+        user.setNickName(nickName);
+        user.setIsDeleted(Constant.IS_DELETED_FALSE);
         userMapper.insert(user);
         return  map;
     }

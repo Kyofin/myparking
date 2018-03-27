@@ -9,6 +9,7 @@ layui.use(['form','layer'],function(){
         // 实际使用时的提交信息
         $.post("/user/addUser",{
             userName : $(".userName").val(),  //登录名
+            nickName : $(".nickName").val(),  //昵称
             email : $(".email").val(),  //邮箱
             password : $(".password").val(),    //密码
             headUrl : $("#headUrl").val(),    //头像url

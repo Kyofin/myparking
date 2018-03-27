@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface ParkingOrderMapper {
@@ -33,4 +34,6 @@ public interface ParkingOrderMapper {
 
     @Select({"select ",SELECT_FIELDS," from ",TABLE_NAME,"WHERE user_id = #{userId} AND status = #{orderStatus} ORDER BY begin_time DESC"})
     List<ParkingOrder> selectAllOrdersByUserIdAndStatus(@Param("userId") Integer userId,@Param("orderStatus") Integer orderStatus);
+
+    List<Map> getDayOrderCount();
 }

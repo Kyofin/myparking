@@ -54,13 +54,14 @@ public class UserController {
     @ResponseBody
     public  String addUser(@RequestParam String userName,
                            @RequestParam String email,
+                           @RequestParam String nickName,
                            @RequestParam String password,
                            @RequestParam String headUrl
                            )
     //todo 方法添加headURL
     {
         try {
-            Map map = userService.addUser(userName,password,email,headUrl);
+            Map map = userService.addUser(userName,password,email,headUrl,nickName);
             if (map.isEmpty())
                 return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS,"添加用户成功");
             else

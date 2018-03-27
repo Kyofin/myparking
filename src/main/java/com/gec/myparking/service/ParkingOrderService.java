@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ParkingOrderService {
@@ -128,5 +129,9 @@ public class ParkingOrderService {
 	public List<ParkingOrder> getOrdersByUserIdAndStatus(Integer id, Integer orderStatus) {
         return parkingOrderMapper.selectAllOrdersByUserIdAndStatus(id,orderStatus);
 
+	}
+
+	public List<Map> getDayOrderCount() {
+		return parkingOrderMapper.getDayOrderCount();
 	}
 }

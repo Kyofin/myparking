@@ -22,7 +22,10 @@
     from parkingorder
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    <select id="getDayOrderCount" resultType="map">
+      SELECT  date_format(begin_time,'%y-%m-%d') as mytime,COUNT(id) myamount FROM parkingorder GROUP BY date_format(begin_time,'%y-%m-%d')
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from parkingorder
     where id = #{id,jdbcType=INTEGER}
   </delete>

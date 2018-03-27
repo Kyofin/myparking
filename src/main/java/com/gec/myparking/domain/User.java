@@ -21,12 +21,12 @@ public class User {
 
     private String nickName ;
 
+    private Integer isDeleted;
 
-    public User() {
-        super();
-    }
+    public User(){}
 
-    public User(Integer id, String userName, String password, String salt, String email, Date createTime, Date updateTime, String headUrl, String nickName) {
+
+    public User(Integer id, String userName, String password, String salt, String email, Date createTime, Date updateTime, String headUrl, String nickName, Integer isDeleted) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -36,7 +36,9 @@ public class User {
         this.updateTime = updateTime;
         this.headUrl = headUrl;
         this.nickName = nickName;
+        this.isDeleted = isDeleted;
     }
+
 
     public Integer getId() {
         return id;
@@ -108,5 +110,13 @@ public class User {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public Integer getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Integer isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
