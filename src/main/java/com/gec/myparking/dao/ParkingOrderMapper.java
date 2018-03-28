@@ -36,4 +36,6 @@ public interface ParkingOrderMapper {
     List<ParkingOrder> selectAllOrdersByUserIdAndStatus(@Param("userId") Integer userId,@Param("orderStatus") Integer orderStatus);
 
     List<Map> getDayOrderCount();
+
+    List<Map> getDayOrderPriceSum();
 }

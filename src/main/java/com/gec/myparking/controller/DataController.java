@@ -24,7 +24,13 @@ public class DataController {
 	@RequestMapping("dayordercount")
 	@ResponseBody
 	public String getDayOrderCount(){
-		List<Map> dayOrderCoutList = orderService.getDayOrderCount();
+		return getResult(orderService.getDayOrderCount());
+
+
+	}
+
+	public String getResult(List<Map> dayOrderCount) {
+		List<Map> dayOrderCoutList = dayOrderCount;
 		List<String> category = new ArrayList<>();
 		List<String> data = new ArrayList<>();
 		for (Map map : dayOrderCoutList) {
@@ -35,6 +41,13 @@ public class DataController {
 		dataMap.put("data",data.toArray());
 		dataMap.put("category",category.toArray());
 		return JSONObject.toJSONString(dataMap);
+	}
+
+	//todo 数据展示
+	@RequestMapping("dayorderpricesum")
+	@ResponseBody
+	public String getDayOrderPriceSum(){
+		return getResult(orderService.getDayOrderPriceSum());
 
 
 	}

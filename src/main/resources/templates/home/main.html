@@ -131,7 +131,8 @@
 			<blockquote class="layui-elem-quote title">数据分析 <i class="layui-icon layui-red">&#xe756;</i></blockquote>
 
 			<!-- 为 ECharts 准备一个具备大小（宽高）的 DOM -->
-			<div id="main" style="width: 900px;height:400px;"></div>
+			<div id="main1" style="width: 900px;height:400px;"></div>
+			<div id="main2" style="width: 900px;height:400px;"></div>
 		</div>
 
 	</div>
@@ -143,22 +144,43 @@
 
 
 	<script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('main'));
+        var myChart = echarts.init(document.getElementById('main1'));
+
+        // 过渡---------------------
+        myChart.showLoading({
+            text: '正在努力的读取数据中...',    //loading话术
+        });
+
         // 显示标题，图例和空的坐标轴
         myChart.setOption({
             title: {
                 text: '停车场每日订单量'
             },
+            color: ['#3398DB'],
             tooltip: {},
             legend: {
-                data:['日订单量']
+                data:['日订单']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            tooltip : {
+                trigger: 'axis'
             },
             xAxis: {
                 data: []
             },
             yAxis: {},
             series: [{
-                name: '日订单量',
+                name: '日订单',
                 type: 'bar',
                 data: []
             }]
@@ -166,6 +188,9 @@
 
         // 异步加载数据
         $.get('/data/dayordercount').done(function (data) {
+
+            // ajax callback
+            myChart.hideLoading();
             var parse = JSON.parse(data);
             // 填入数据
             myChart.setOption({
@@ -175,6 +200,69 @@
                 series: [{
                     // 根据名字对应到相应的系列
                     name: '日订单',
+                    data: parse.data
+                }]
+            });
+        });
+
+
+
+        //图表2
+        var myChart2 = echarts.init(document.getElementById('main2'));
+
+        // 过渡---------------------
+        myChart2.showLoading({
+            text: '正在努力的读取数据中...',    //loading话术
+        });
+
+        // 显示标题，图例和空的坐标轴
+        myChart2.setOption({
+            title: {
+                text: '停车场每日收入'
+            },
+            tooltip: {},
+            legend: {
+                data:['日收入']
+            },
+            toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    dataView : {show: true, readOnly: false},
+                    magicType : {show: true, type: ['line', 'bar']},
+                    restore : {show: true},
+                    saveAsImage : {show: true}
+                }
+            },
+            calculable : true,
+            tooltip : {
+                trigger: 'axis'
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '日收入',
+                type: 'line',
+                data: []
+            }]
+        });
+
+        // 异步加载数据
+        $.get('/data/dayorderpricesum').done(function (data) {
+
+            // ajax callback
+            myChart2.hideLoading();
+            var parse = JSON.parse(data);
+            // 填入数据
+            myChart2.setOption({
+                xAxis: {
+                    data: parse.category
+                },
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: '日收入',
                     data: parse.data
                 }]
             });

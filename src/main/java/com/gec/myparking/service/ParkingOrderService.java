@@ -134,4 +134,8 @@ public class ParkingOrderService {
 	public List<Map> getDayOrderCount() {
 		return parkingOrderMapper.getDayOrderCount();
 	}
+
+    public List<Map> getDayOrderPriceSum() {
+        return parkingOrderMapper.getDayOrderPriceSum();
+    }
 }

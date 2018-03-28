@@ -117,7 +117,7 @@ public class PortalUserController {
 	@RequestMapping("bookPortPage")
 	public String bookPortPage(Model model) {
 
-		//查询是否已经绑定车位
+		//查询是否已经预定车位
 		List<ParkingPort> portList = portService.getPortsByUserIdAndStatus(hostHolder.getUser().getId(), MyparkingUtil.PORT_STATUS_BOOKING);
 		model.addAttribute("portList", portList);
 
