@@ -6,9 +6,11 @@ import com.gec.myparking.domain.ParkingPort;
 import com.gec.myparking.service.ParkingPortService;
 import com.gec.myparking.service.UserService;
 import com.gec.myparking.service.WebSocket;
+import com.gec.myparking.service.WechatService;
 import com.gec.myparking.util.Constant;
 import com.gec.myparking.util.MyparkingUtil;
 import com.github.pagehelper.PageInfo;
+import me.chanjar.weixin.mp.api.WxMpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class ParkingPortController {
 
     @Autowired
     HostHolder hostHolder;
+
+    @Autowired
+    WechatService wechatService;
 
 
 
@@ -127,6 +132,10 @@ public class ParkingPortController {
             Map map =  parkingPortService.bookPortByPortName(portName);
             if (map.isEmpty())
             {
+                if (hostHolder.getUser().getUserName().contains("ow")) {
+                    //只有微信用户，才能发送微信模板推送
+                    wechatService.sendBookPortTemplateMsg(hostHolder.getUser().getUserName(), portName);
+                }
                 return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_SUCCESS, "预定车位成功");
             }else
                 return MyparkingUtil.getJsonString(Constant.RESULT_STATUS_FAIL,map,"预定车位失败");

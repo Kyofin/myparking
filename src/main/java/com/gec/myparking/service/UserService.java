@@ -242,6 +242,7 @@ public class UserService {
         user.setNickName(nickName);
         user.setHeadUrl(headUrl);
         user.setCreateTime(new Date());
+        user.setIsDeleted(Constant.IS_DELETED_FALSE);
         return userMapper.insertSelective(user);
     }
 

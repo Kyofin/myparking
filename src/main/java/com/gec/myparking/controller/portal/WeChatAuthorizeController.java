@@ -6,17 +6,22 @@ import com.gec.myparking.domain.User;
 import com.gec.myparking.service.LoginTicketService;
 import com.gec.myparking.service.UserService;
 import com.gec.myparking.service.WebSocket;
+import com.gec.myparking.util.Constant;
 import me.chanjar.weixin.common.api.WxConsts;
 import me.chanjar.weixin.common.bean.WxJsapiSignature;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
 import me.chanjar.weixin.mp.bean.result.WxMpOAuth2AccessToken;
 import me.chanjar.weixin.mp.bean.result.WxMpUser;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
+import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Controller
@@ -70,6 +76,7 @@ public class WeChatAuthorizeController {
 		// 然后用这个code获得access token，其中也包含用户的openid等信息
 		WxMpUser wxMpUser = wxMpService.oauth2getUserInfo(wxMpOAuth2AccessToken, null);
 
+
 		//获取数据库该用户名是否存在，不存在则注册
 		String userName = wxMpUser.getOpenId();
 		String headUrl = wxMpUser.getHeadImgUrl();
@@ -78,7 +85,8 @@ public class WeChatAuthorizeController {
 		User user = userService.getUserByUserName(userName);
 		Integer userId = null;
 		if (user ==null){
-			userId = userService.addWxUser(userName,nickName,headUrl);
+			userService.addWxUser(userName,nickName,headUrl);
+			userId = userService.getUserByUserName(userName).getId();
 		}else {
 			userId = user.getId();
 			//更新wx资料到数据库的用户资料
@@ -104,6 +112,9 @@ public class WeChatAuthorizeController {
 		return "redirect:/portal/user/indexPage";
 
 	}
+
+
+
 
 
 }
