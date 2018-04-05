@@ -31,21 +31,7 @@ layui.use(['form','layer','table','laytpl'],function(){
             {field: 'headUrl', title: '用户头像',  align:'center',templet:function(d){
                 return '<img class="layui-blue" src="'+d.headUrl+'" />';
             }},
-            /*{field: 'userGrade', title: '用户等级', align:'center',templet:function(d){
-                if(d.userGrade == "0"){
-                    return "注册会员";
-                }else if(d.userGrade == "1"){
-                    return "中级会员";
-                }else if(d.userGrade == "2"){
-                    return "高级会员";
-                }else if(d.userGrade == "3"){
-                    return "钻石会员";
-                }else if(d.userGrade == "4"){
-                    return "超级会员";
-                }
-            }},
-            {field: 'userEndTime', title: '最后登录时间', align:'center',minWidth:150},*/
-            {title: '操作', width:105, templet:'#userListBar',fixed:"right",align:"center"}
+           {title: '操作', width:105, templet:'#userListBar',fixed:"right",align:"center"}
         ]]
     });
 
@@ -154,12 +140,7 @@ layui.use(['form','layer','table','laytpl'],function(){
             });
         }else if(layEvent === 'del'){ //删除
             layer.confirm('确定删除此用户？',{icon:3, title:'提示信息'},function(index){
-               /* $.get("/user/users",{
-                    newsId : data.newsId  //将需要删除的newsId作为参数传入
-                 },function(data){
-                    tableIns.reload();
-                    layer.close(index);
-                })*/
+
                console.log(data.id);
                 $.ajax({
                     url: '/user/users',

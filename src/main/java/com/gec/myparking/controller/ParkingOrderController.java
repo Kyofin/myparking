@@ -40,8 +40,8 @@ public class ParkingOrderController {
 
 	@RequestMapping(value = "/orders", method = RequestMethod.GET)
 	@ResponseBody
-	public String getParkingPorts(@RequestParam(value = "page", required = false) Integer page,
-								  @RequestParam(value = "limit", required = false) Integer limit) {
+	public String getParkingOrders(@RequestParam(value = "page", required = false) Integer page,
+								   @RequestParam(value = "limit", required = false) Integer limit) {
 		try {
 			PageInfo<ParkingOrder> parkingOrderPageInfo = parkingOrderService.getOrders(page, limit);
 			List<Map> dataList = new ArrayList<>();

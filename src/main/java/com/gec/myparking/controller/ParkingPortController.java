@@ -124,6 +124,11 @@ public class ParkingPortController {
     }
 
 
+    /**
+     * 使用车位名预订车位（微信用户会推送模板信息）
+     * @param portName
+     * @return
+     */
     @RequestMapping(value = "/book/{portName}",method = RequestMethod.POST)
     @ResponseBody
     public  String bookPortByPortName(@PathVariable("portName") String portName)
@@ -132,7 +137,7 @@ public class ParkingPortController {
             Map map =  parkingPortService.bookPortByPortName(portName);
             if (map.isEmpty())
             {
-                if (hostHolder.getUser().getUserName().contains("ow")) {
+                if (hostHolder.getUser().getUserName().startsWith("owZNgw")) {
                     //只有微信用户，才能发送微信模板推送
                     wechatService.sendBookPortTemplateMsg(hostHolder.getUser().getUserName(), portName);
                 }

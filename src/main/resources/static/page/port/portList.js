@@ -5,7 +5,7 @@ layui.use(['form','layer','table','laytpl'],function(){
         laytpl = layui.laytpl,
         table = layui.table;
 
-    //车辆列表
+    //车位列表
     var tableIns = table.render({
         elem: '#portList',
         url : '/parkingport/parkingports',
