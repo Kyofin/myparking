@@ -51,7 +51,7 @@ public class AStar
 			}
 			Node current = openList.poll();
 			closeList.add(current);
-			addNeighborNodeInOpen(mapInfo,current);
+			addAllNeighborNodeInOpen(mapInfo,current);
 		}
 	}
 	
@@ -82,32 +82,32 @@ public class AStar
 	/**
 	 * 添当前点所有邻结点到open表
 	 */
-	private void addNeighborNodeInOpen(MapInfo mapInfo,Node current)
+	private void addAllNeighborNodeInOpen(MapInfo mapInfo, Node current)
 	{
 		int x = current.coord.x;
 		int y = current.coord.y;
 		// 左
-		addNeighborNodeInOpen(mapInfo,current, x - 1, y, DIRECT_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x - 1, y, DIRECT_VALUE);
 		// 上
-		addNeighborNodeInOpen(mapInfo,current, x, y - 1, DIRECT_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x, y - 1, DIRECT_VALUE);
 		// 右
-		addNeighborNodeInOpen(mapInfo,current, x + 1, y, DIRECT_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x + 1, y, DIRECT_VALUE);
 		// 下
-		addNeighborNodeInOpen(mapInfo,current, x, y + 1, DIRECT_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x, y + 1, DIRECT_VALUE);
 		// 左上
-		addNeighborNodeInOpen(mapInfo,current, x - 1, y - 1, OBLIQUE_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x - 1, y - 1, OBLIQUE_VALUE);
 		// 右上
-		addNeighborNodeInOpen(mapInfo,current, x + 1, y - 1, OBLIQUE_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x + 1, y - 1, OBLIQUE_VALUE);
 		// 右下
-		addNeighborNodeInOpen(mapInfo,current, x + 1, y + 1, OBLIQUE_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x + 1, y + 1, OBLIQUE_VALUE);
 		// 左下
-		addNeighborNodeInOpen(mapInfo,current, x - 1, y + 1, OBLIQUE_VALUE);
+		addAnNeighborNodeInOpen(mapInfo,current, x - 1, y + 1, OBLIQUE_VALUE);
 	}
 
 	/**
 	 * 添加一个邻结点到open表
 	 */
-	private void addNeighborNodeInOpen(MapInfo mapInfo,Node current, int x, int y, int value)
+	private void addAnNeighborNodeInOpen(MapInfo mapInfo, Node current, int x, int y, int value)
 	{
 		if (canAddNodeToOpen(mapInfo,x, y))
 		{

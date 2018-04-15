@@ -50,54 +50,14 @@ public class WxMenuController implements WxMpMenuService {
     System.out.println("正在生成菜单");
     WxMenu menu = new WxMenu();
     WxMenuButton button1 = new WxMenuButton();
-   /* button1.setType(MenuButtonType.VIEW);
-    button1.setName("今日歌曲");
-    button1.setKey("V1001_TODAY_MUSIC");*/
-   button1.setName("用户使用");
-   button1.setUrl("http://abc.21java.xyz/portal/user/indexPage");
-   button1.setType(MenuButtonType.VIEW);
 
-   WxMenuButton button2 = new WxMenuButton();
-   button2.setType(MenuButtonType.VIEW);
-   button2.setUrl(Constant.CONTEXT_URL);
-   button2.setName("企业管理");
+    button1.setName("用户使用");
+    button1.setUrl("http://abc.21java.xyz/portal/user/indexPage");
+    button1.setType(MenuButtonType.VIEW);
 
-
-   menu.getButtons().add(button1);
-   menu.getButtons().add(button2);
-
-//        WxMenuButton button2 = new WxMenuButton();
-//        button2.setType(WxConsts.BUTTON_MINIPROGRAM);
-//        button2.setName("小程序");
-//        button2.setAppId("wx286b93c14bbf93aa");
-//        button2.setPagePath("pages/lunar/index.html");
-//        button2.setUrl("http://mp.weixin.qq.com");
-
-    /*WxMenuButton button3 = new WxMenuButton();
-    button3.setName("菜单");
 
     menu.getButtons().add(button1);
-//        menu.getButtons().add(button2);
-    menu.getButtons().add(button3);
 
-    WxMenuButton button31 = new WxMenuButton();
-    button31.setType(MenuButtonType.VIEW);
-    button31.setName("搜索");
-    button31.setUrl("http://www.soso.com/");
-
-    WxMenuButton button32 = new WxMenuButton();
-    button32.setType(MenuButtonType.VIEW);
-    button32.setName("视频");
-    button32.setUrl("http://v.qq.com/");
-
-    WxMenuButton button33 = new WxMenuButton();
-    button33.setType(MenuButtonType.CLICK);
-    button33.setName("赞一下我们");
-    button33.setKey("V1001_GOOD");
-
-    button3.getSubButtons().add(button31);
-    button3.getSubButtons().add(button32);
-    button3.getSubButtons().add(button33);*/
 
     return this.wxService.getMenuService().menuCreate(menu);
   }
