@@ -8,7 +8,6 @@ package com.gec.myparking.AStart;
  */
 public class Coord
 {
-
 	public int x;
 	public int y;
 
@@ -18,14 +17,9 @@ public class Coord
 		this.y = y;
 	}
 
-
-
 	/**
 	 * 横坐标和纵坐标相同才是相等的坐标
-	 * @param obj
-	 * @return
 	 */
-
 	@Override
 	public boolean equals(Object obj)
 	{
